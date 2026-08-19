@@ -4,26 +4,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   Building2,
-  Calendar,
   Clock,
   MapPin,
   Mail,
   Phone,
-  Users,
   Award,
   Sparkles,
   ChevronRight,
   Send,
-  Video,
   ArrowLeft,
   CalendarDays,
-  FileCheck
 } from 'lucide-react';
-import { CLUBS_DATA, RotaryClub } from '@/data/clubsData';
+import { CLUBS_DATA } from '@/data/clubsData';
 import rawMockData from '@/data/mockData.json';
 import NewsSection from '@/components/NewsSection';
 import { NewsItem } from '@/components/NewsCard';
-import { FEATURED_VIDEOS } from '@/data/videosData';
 
 const mockNews: NewsItem[] = rawMockData as NewsItem[];
 
@@ -51,9 +46,6 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
   const clubNews = mockNews.filter(
     (item) => item.clubId.toLowerCase() === club.id.toLowerCase()
   );
-
-  // Relevant videos (either matching or featured)
-  const clubVideos = FEATURED_VIDEOS;
 
   const formattedCharterDate = new Date(club.charterDate + 'T00:00:00').toLocaleDateString(
     'es-CL',
@@ -171,7 +163,7 @@ export default async function ClubDetailPage({ params }: ClubPageProps) {
 
             </div>
 
-            {/* Right: Board of Directors Card (Directiva 2026-2027) */}
+            {/* Right: Board of Directors Card */}
             <div className="lg:col-span-4">
               <div className="bg-white text-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-100">
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200">
