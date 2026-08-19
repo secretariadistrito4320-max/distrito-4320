@@ -64,7 +64,7 @@ export default function Footer() {
           {/* Column 1: Identity & Official Logo */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-block">
-              <div className="relative w-56 h-16 sm:w-64 sm:h-20">
+              <div className="relative w-72 h-24 sm:w-80 sm:h-28">
                 <Image
                   src="/images/logo-rotary_2.png"
                   alt="Rotary Distrito 4320"
