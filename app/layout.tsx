@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import TopBar from '@/components/TopBar';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -31,7 +30,6 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 font-sans antialiased selection:bg-[#F7A81B] selection:text-[#00246C]"
       >
-        <TopBar />
         <Navbar />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
