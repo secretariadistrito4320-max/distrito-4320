@@ -50,49 +50,33 @@ export async function generateMetadata({ params }: PageProps) {
 function formatArticleContent(rawContent: string): string {
   if (!rawContent) return '';
 
-  if (/<(p|div|h[1-6]|blockquote|section)/i.test(rawContent)) {
-    return rawContent;
-  }
+  let formatted = rawContent;
 
-  let normalized = rawContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
-  normalized = normalized.replace(
+  // 1. Destacar subtítulos o lemas con margen superior e inferior holgado
+  formatted = formatted.replace(
     /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
-    '\n\n<h3 class="text-base sm:text-lg font-bold text-[#00246C] my-5 pt-3 border-t border-slate-100">$1</h3>\n\n'
+    '</p><h3 class="text-base sm:text-lg font-extrabold text-[#00246C] mt-10 mb-4 pt-4 border-t border-slate-200 tracking-tight">$1</h3><p>'
   );
 
-  const paragraphs = normalized.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
+  // 2. Si el texto viene en bloques planos, envolver en párrafos justificados
+  if (!/<(p|div|h[1-6]|blockquote|section)/i.test(formatted)) {
+    const paragraphs = formatted
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .split(/\n\s*\n/)
+      .filter((p) => p.trim().length > 0);
 
-  if (paragraphs.length > 1) {
-    return paragraphs
-      .map((p) => {
-        if (p.trim().startsWith('<h3')) return p;
-        return `<p class="mb-4 leading-relaxed text-slate-700">${p.trim().replace(/\n/g, '<br/>')}</p>`;
-      })
-      .join('');
-  }
-
-  const sentences = normalized.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ])/);
-  if (sentences.length > 2) {
-    let chunks: string[] = [];
-    let currentChunk = '';
-
-    sentences.forEach((sentence) => {
-      currentChunk += sentence + ' ';
-      if (currentChunk.length > 220) {
-        chunks.push(`<p class="mb-4 leading-relaxed text-slate-700">${currentChunk.trim()}</p>`);
-        currentChunk = '';
-      }
-    });
-
-    if (currentChunk.trim()) {
-      chunks.push(`<p class="mb-4 leading-relaxed text-slate-700">${currentChunk.trim()}</p>`);
+    if (paragraphs.length > 0) {
+      formatted = paragraphs
+        .map((p) => {
+          if (p.trim().startsWith('<h3')) return p;
+          return `<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">${p.trim().replace(/\n/g, '<br/>')}</p>`;
+        })
+        .join('');
     }
-
-    return chunks.join('');
   }
 
-  return `<p class="mb-4 leading-relaxed text-slate-700">${normalized}</p>`;
+  return formatted;
 }
 
 export default async function NewsDetailPage({ params }: PageProps) {
@@ -167,17 +151,15 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
           </div>
 
-          {/* Imagen Principal de Portada Sin Recortar (100% visible) */}
+          {/* Imagen Principal de Portada */}
           {news.imageUrl && (
             <div className="relative w-full h-[360px] sm:h-[480px] lg:h-[540px] bg-slate-950 overflow-hidden border-b border-slate-100">
-              {/* Fondo Ambiental Difuminado */}
               <Image
                 src={news.imageUrl}
                 alt=""
                 fill
                 className="object-cover blur-2xl opacity-25 scale-125 pointer-events-none"
               />
-              {/* Imagen Principal Completa */}
               <Image
                 src={news.imageUrl}
                 alt={news.title}
@@ -189,27 +171,27 @@ export default async function NewsDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Cuerpo del Artículo Maquetado */}
+          {/* Cuerpo del Artículo Maquetado (Texto Justificado + Espaciado de Imágenes) */}
           <div className="p-6 sm:p-10">
             <div
               className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed
-                         prose-headings:font-black prose-headings:text-[#00246C] prose-headings:tracking-tight
-                         prose-p:mb-5 prose-p:leading-relaxed
+                         prose-headings:font-black prose-headings:text-[#00246C] prose-headings:tracking-tight prose-headings:mt-10 prose-headings:mb-4
+                         prose-p:mb-6 prose-p:leading-relaxed prose-p:text-justify prose-p:text-pretty
                          prose-strong:text-[#00246C] prose-strong:font-bold
                          prose-a:text-[#00246C] prose-a:font-bold prose-a:underline hover:prose-a:text-amber-600
-                         prose-img:rounded-2xl prose-img:shadow-md prose-img:my-6 prose-img:w-full prose-img:object-cover"
+                         prose-img:rounded-2xl prose-img:shadow-md prose-img:my-10 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-slate-200"
               dangerouslySetInnerHTML={{ __html: formattedHtml }}
             />
 
             {/* Galería Fotográfica Secundarias */}
             {galleryImages.length > 1 && (
-              <div className="mt-10 pt-8 border-t border-slate-200">
-                <h3 className="text-lg font-bold text-[#00246C] mb-4 flex items-center gap-2">
+              <div className="mt-12 pt-8 border-t border-slate-200">
+                <h3 className="text-lg font-bold text-[#00246C] mb-6 flex items-center gap-2">
                   <Images className="w-5 h-5 text-[#F7A81B]" />
                   <span>Galería Fotográfica de la Actividad</span>
                 </h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   {galleryImages.map((imgUrl, idx) => (
                     <div
                       key={idx}
