@@ -3,11 +3,22 @@ import { NewsItem } from '@/components/NewsCard';
 
 const API_URL = process.env.NEXT_PUBLIC_SHEETS_API_URL || 'https://script.google.com/macros/s/AKfycbyB2VdT6qYPNcEAmlrAMWpgpd9LObcTAk0imjRMsI6W3-ChCegRi31w_B1WoZpxW5va/exec';
 
-export async function getNews(): Promise<NewsItem[]> {
+// Variable de caché en memoria para reusar la petición durante la compilación
+let cachedNewsPromise: Promise<NewsItem[]> | null = null;
+
+async function fetchNewsFromSheet(): Promise<NewsItem[]> {
   try {
+    // Timeout de 5 segundos para evitar bloqueos en el build
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     const res = await fetch(API_URL, {
+      signal: controller.signal,
+      redirect: 'follow',
       next: { revalidate: 60 }
     });
+
+    clearTimeout(timeoutId);
 
     if (!res.ok) {
       console.warn('Error al consultar Google Sheets, usando mockData');
@@ -36,7 +47,14 @@ export async function getNews(): Promise<NewsItem[]> {
     }));
 
   } catch (error) {
-    console.error('Error al conectar con la API de Google Sheets:', error);
+    console.warn('Google Sheets tardó demasiado o no respondió. Usando datos locales de respaldo.');
     return rawMockData as NewsItem[];
   }
+}
+
+export function getNews(): Promise<NewsItem[]> {
+  if (!cachedNewsPromise) {
+    cachedNewsPromise = fetchNewsFromSheet();
+  }
+  return cachedNewsPromise;
 }
