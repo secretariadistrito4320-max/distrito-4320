@@ -1,35 +1,26 @@
 import rawMockData from '@/data/mockData.json';
 import { NewsItem } from '@/components/NewsCard';
 
-const API_URL =
-  process.env.NEXT_PUBLIC_SHEETS_API_URL ||
-  'https://script.google.com/macros/s/AKfycbyB2VdT6qYPNcEAmlrAMWpgpd9LObcTAk0imjRMsI6W3-ChCegRi31w_B1WoZpxW5va/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyB2VdT6qYPNcEAmlrAMWpgpd9LObcTAk0imjRMsI6W3-ChCegRi31w_B1WoZpxW5va/exec';
 
-let cachedNewsPromise: Promise<NewsItem[]> | null = null;
-
-async function fetchNewsFromSheet(): Promise<NewsItem[]> {
+export async function getNews(): Promise<NewsItem[]> {
   try {
-    // Ampliamos el tiempo a 25 segundos para permitir que Google Apps Script entregue las 506 noticias
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
-
     const res = await fetch(API_URL, {
-      signal: controller.signal,
+      method: 'GET',
       redirect: 'follow',
       cache: 'no-store'
     });
 
-    clearTimeout(timeoutId);
-
     if (!res.ok) {
-      console.warn('⚠️ Respuesta no OK de Google Sheets, usando mockData');
+      console.warn(`⚠️ Error HTTP ${res.status} al consultar Google Sheets.`);
       return rawMockData as NewsItem[];
     }
 
     const data = await res.json();
 
+    // Si Apps Script devolvió un objeto de error o la lista está vacía
     if (!Array.isArray(data) || data.length === 0) {
-      console.warn('⚠️ JSON de Google Sheets vacío, usando mockData');
+      console.warn('⚠️ La respuesta de Google Sheets no es un listado válido:', data);
       return rawMockData as NewsItem[];
     }
 
@@ -50,14 +41,7 @@ async function fetchNewsFromSheet(): Promise<NewsItem[]> {
     }));
 
   } catch (error) {
-    console.warn('⚠️ Google Sheets no respondió a tiempo. Usando respaldo local:', error);
+    console.error('❌ Error de conexión con Google Sheets:', error);
     return rawMockData as NewsItem[];
   }
-}
-
-export function getNews(): Promise<NewsItem[]> {
-  if (!cachedNewsPromise) {
-    cachedNewsPromise = fetchNewsFromSheet();
-  }
-  return cachedNewsPromise;
 }
