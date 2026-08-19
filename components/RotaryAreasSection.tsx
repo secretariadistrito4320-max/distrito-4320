@@ -9,7 +9,10 @@ import {
   Syringe,
   CheckCircle2,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Users,
+  Award,
+  Globe
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -67,18 +70,19 @@ export default function RotaryAreasSection() {
   ];
 
   return (
-    <section className="w-full py-14 sm:py-20 bg-white border-t border-slate-200" id="nuestros-proyectos">
+    <section className="w-full py-14 sm:py-20 bg-white border-t border-slate-200" id="quienes-somos">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* District Manifesto Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mb-16">
+        {/* 1. MANIFIESTO DISTRITAL & CIFRAS */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mb-16" id="objetivos-valores">
+          
           <div className="lg:col-span-6 space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-[#F7A81B]" />
               <span>Manifiesto Distrital · Periodo 2026-2027</span>
             </div>
             
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#00246C] tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#00246C] tracking-tight leading-tight">
               Unidos Para Hacer El Bien y Generar un Impacto Duradero
             </h2>
 
@@ -124,11 +128,12 @@ export default function RotaryAreasSection() {
             </div>
           </div>
 
-          {/* District Highlights Metrics Box */}
+          {/* Distrito en cifras */}
           <div className="lg:col-span-6 bg-gradient-to-br from-[#00246C] to-[#001744] text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-blue-900 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#F7A81B]/10 rounded-full blur-3xl pointer-events-none" />
             
             <h3 className="text-lg font-bold text-[#F7A81B] mb-6 flex items-center gap-2">
+              <Globe className="w-5 h-5 text-[#F7A81B]" />
               <span>Distrito 4320 en Cifras Oficiales</span>
             </h3>
 
@@ -186,19 +191,20 @@ export default function RotaryAreasSection() {
               Corporación Rotary International Distrito 4320 · Chile
             </div>
           </div>
+
         </div>
 
-        {/* 7 Areas of Focus of Rotary Grid */}
-        <div className="mt-12">
+        {/* 2. LAS 7 ÁREAS DE INTERÉS DE ROTARY */}
+        <div className="mt-16 pt-10 border-t border-slate-100" id="nuestros-proyectos">
           <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-[#00246C] font-bold text-xs uppercase tracking-widest">
               Compromiso Global
             </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
               Las 7 Áreas de Interés de Rotary International
             </h3>
-            <p className="text-slate-600 text-xs sm:text-sm mt-1.5">
-              Nuestros clubes concentran sus esfuerzos y subvenciones en causas de alto impacto que transforman vidas.
+            <p className="text-slate-600 text-xs sm:text-sm mt-1.5 leading-relaxed">
+              Nuestros clubes concentran sus esfuerzos y subvenciones en causas de alto impacto que transforman vidas en todo el mundo.
             </p>
           </div>
 
@@ -252,6 +258,63 @@ export default function RotaryAreasSection() {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        {/* 3. PROGRAMAS JUVENILES (INTERACT Y ROTARACT) */}
+        <div className="mt-16 pt-10 border-t border-slate-200" id="interact">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" id="rotaract">
+            
+            {/* Tarjeta Interact */}
+            <div className="bg-gradient-to-br from-amber-500 to-amber-600 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-amber-100 block">
+                    Jóvenes de 12 a 18 años
+                  </span>
+                  <h4 className="text-xl font-black">Programa Interact</h4>
+                </div>
+              </div>
+              <p className="text-xs sm:text-sm text-amber-50 leading-relaxed mb-4">
+                Formamos a la próxima generación de líderes. Los clubes Interact organizan proyectos de servicio comunitario, desarrollan habilidades de oratoria y promueven la amistad internacional.
+              </p>
+              <Link
+                href="/clubes"
+                className="inline-flex items-center gap-1.5 text-xs font-bold bg-white text-amber-900 px-4 py-2 rounded-xl hover:bg-amber-50 transition-colors shadow-sm"
+              >
+                <span>Ver clubes Interact del Distrito</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Tarjeta Rotaract */}
+            <div className="bg-gradient-to-br from-[#00246C] to-blue-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-200 block">
+                    Jóvenes y Adultos de 18+ años
+                  </span>
+                  <h4 className="text-xl font-black">Programa Rotaract</h4>
+                </div>
+              </div>
+              <p className="text-xs sm:text-sm text-blue-100 leading-relaxed mb-4">
+                Líderes jóvenes impulsando innovación social. Rotaract permite a universitarios y profesionales jóvenes abordar desafíos comunitarios, liderar proyectos globales y tejer redes de contacto.
+              </p>
+              <Link
+                href="/clubes"
+                className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#F7A81B] text-[#00246C] px-4 py-2 rounded-xl hover:bg-amber-400 transition-colors shadow-sm"
+              >
+                <span>Ver clubes Rotaract del Distrito</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
           </div>
         </div>
 
