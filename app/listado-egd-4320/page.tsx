@@ -39,7 +39,7 @@ export default function ListadoEgdPage() {
         }
       } catch (err) {
         console.warn('Cargando respaldo local de EGD:', err);
-      } font-sans {
+      } finally {
         setLoading(false);
       }
     }
