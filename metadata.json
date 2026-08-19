@@ -1,0 +1,6 @@
+{
+  "name": "Rotary Distrito 4320",
+  "description": "Portal Web Oficial del Rotary Club Distrito 4320 (Chile). Noticias, cartas de gobernadores, directorio de clubes, transparencia y pagos 2026-2027.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
