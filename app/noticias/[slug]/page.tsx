@@ -7,12 +7,9 @@ import {
   User,
   Building2,
   ArrowLeft,
-  Share2,
-  Tag,
-  Newspaper,
-  ChevronRight,
   Sparkles,
-  Images
+  Images,
+  ChevronRight
 } from 'lucide-react';
 import { getNews } from '@/lib/getNews';
 import { NewsItem } from '@/components/NewsCard';
@@ -50,6 +47,57 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
+function formatArticleContent(rawContent: string): string {
+  if (!rawContent) return '';
+
+  // 1. Si el contenido ya posee estructura HTML de etiquetas
+  if (/<(p|div|h[1-6]|blockquote|section)/i.test(rawContent)) {
+    return rawContent;
+  }
+
+  // 2. Normalizar y separar lemas o títulos en mayúsculas
+  let normalized = rawContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+  normalized = normalized.replace(
+    /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
+    '\n\n<h3 class="text-base sm:text-lg font-bold text-[#00246C] my-5 pt-3 border-t border-slate-100">$1</h3>\n\n'
+  );
+
+  const paragraphs = normalized.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
+
+  if (paragraphs.length > 1) {
+    return paragraphs
+      .map((p) => {
+        if (p.trim().startsWith('<h3')) return p;
+        return `<p class="mb-4 leading-relaxed text-slate-700">${p.trim().replace(/\n/g, '<br/>')}</p>`;
+      })
+      .join('');
+  }
+
+  // 3. Fallback: Si viene en un único bloque sin saltos de línea, dividir por oraciones largas
+  const sentences = normalized.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ])/);
+  if (sentences.length > 2) {
+    let chunks: string[] = [];
+    let currentChunk = '';
+
+    sentences.forEach((sentence) => {
+      currentChunk += sentence + ' ';
+      if (currentChunk.length > 220) {
+        chunks.push(`<p class="mb-4 leading-relaxed text-slate-700">${currentChunk.trim()}</p>`);
+        currentChunk = '';
+      }
+    });
+
+    if (currentChunk.trim()) {
+      chunks.push(`<p class="mb-4 leading-relaxed text-slate-700">${currentChunk.trim()}</p>`);
+    }
+
+    return chunks.join('');
+  }
+
+  return `<p class="mb-4 leading-relaxed text-slate-700">${normalized}</p>`;
+}
+
 export default async function NewsDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const allNews = await getNews();
@@ -59,12 +107,10 @@ export default async function NewsDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Noticia relacionada/sugerida
   const relatedNews = allNews
     .filter((item) => item.slug !== slug)
     .slice(0, 3);
 
-  // Obtener arreglo de imágenes de la galería si existe la columna
   const galleryImages = (news as NewsItem & { gallery?: string }).gallery
     ? (news as NewsItem & { gallery?: string }).gallery!
         .split(',')
@@ -72,14 +118,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
         .filter((img) => img.length > 0)
     : [];
 
-  // Formatear contenido HTML para asegurar saltos de línea si vienen como texto plano
-  const formattedHtml =
-    news.content.includes('<p>') || news.content.includes('<div')
-      ? news.content
-      : news.content
-          .split('\n\n')
-          .map((p) => `<p class="mb-4 leading-relaxed">${p.replace(/\n/g, '<br/>')}</p>`)
-          .join('');
+  const formattedHtml = formatArticleContent(news.content);
 
   return (
     <div className="w-full bg-[#F8FAFC] py-10 sm:py-16 font-sans">
@@ -145,7 +184,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Cuerpo del Artículo (Renderiza HTML con formato) */}
+          {/* Cuerpo del Artículo Maquetado */}
           <div className="p-6 sm:p-10">
             <div
               className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed
@@ -157,7 +196,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
               dangerouslySetInnerHTML={{ __html: formattedHtml }}
             />
 
-            {/* Galería de Imágenes Secundarias */}
+            {/* Galería Fotográfica Secundarias */}
             {galleryImages.length > 1 && (
               <div className="mt-10 pt-8 border-t border-slate-200">
                 <h3 className="text-lg font-bold text-[#00246C] mb-4 flex items-center gap-2">
@@ -187,7 +226,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
         </article>
 
-        {/* Noticias Sugeridas / Relacionadas */}
+        {/* Noticias Sugeridas */}
         {relatedNews.length > 0 && (
           <div className="mt-12 pt-8 border-t border-slate-200">
             <h3 className="text-xl font-black text-[#00246C] mb-6 flex items-center gap-2">
