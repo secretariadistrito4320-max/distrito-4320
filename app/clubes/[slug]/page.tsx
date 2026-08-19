@@ -4,13 +4,8 @@ import { notFound } from 'next/navigation';
 import {
   Building2,
   MapPin,
-  Calendar,
-  Clock,
   Mail,
   ArrowLeft,
-  Users,
-  Award,
-  ChevronRight,
   Newspaper,
   Sparkles
 } from 'lucide-react';
@@ -40,7 +35,7 @@ export async function generateMetadata({ params }: PageProps) {
 
   return {
     title: `${club.name} | Rotary Distrito 4320`,
-    description: `Información oficial, días de reunión, actividades y noticias de ${club.name} en ${club.city}, ${club.region}.`,
+    description: `Información oficial, actividades y noticias de ${club.name} en ${club.city}, ${club.region}.`,
   };
 }
 
@@ -98,26 +93,9 @@ export default async function ClubDetailPage({ params }: PageProps) {
                 Comunidad de socias y socios rotarios comprometidos con el servicio comunitario en la ciudad de <strong className="text-[#00246C]">{club.city}</strong>. Integrados a la red del Distrito 4320 de Rotary International.
               </p>
 
-              <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                {club.meetingDay && (
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                    <Calendar className="w-4 h-4 text-[#F7A81B] mt-0.5 flex-shrink-0" />
-                    <div>
-                      <span className="block font-bold text-slate-500 text-[10px] uppercase">Día de Reunión:</span>
-                      <span className="font-bold text-[#00246C]">{club.meetingDay} {club.meetingTime ? `· ${club.meetingTime}` : ''}</span>
-                    </div>
-                  </div>
-                )}
-
-                {club.meetingPlace && (
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3">
-                    <MapPin className="w-4 h-4 text-[#F7A81B] mt-0.5 flex-shrink-0" />
-                    <div>
-                      <span className="block font-bold text-slate-500 text-[10px] uppercase">Lugar de Reunión:</span>
-                      <span className="font-bold text-[#00246C]">{club.meetingPlace}</span>
-                    </div>
-                  </div>
-                )}
+              <div className="pt-2 flex items-center gap-2 text-xs text-slate-500 font-semibold">
+                <MapPin className="w-4 h-4 text-[#F7A81B]" />
+                <span>Ubicación: {club.city}, Chile</span>
               </div>
             </div>
 
@@ -130,7 +108,7 @@ export default async function ClubDetailPage({ params }: PageProps) {
 
               <div className="space-y-3 text-xs">
                 <div>
-                  <span className="block text-blue-200 text-[10px] uppercase">Ciudad y Sede:</span>
+                  <span className="block text-blue-200 text-[10px] uppercase">Ciudad:</span>
                   <span className="font-bold text-white">{club.city}, Chile</span>
                 </div>
 
