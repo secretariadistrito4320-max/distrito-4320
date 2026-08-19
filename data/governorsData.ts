@@ -1,6 +1,6 @@
 export interface GovernorLetter {
   id: string;
-  month: string; // e.g. "Agosto 2026", "Julio 2026"
+  month: string;
   title: string;
   summary: string;
   fullText: string;
@@ -12,8 +12,8 @@ export interface Governor {
   id: string;
   slug: string;
   name: string;
-  shortName: string; // "Carlos", "Edgar", "Emilio", etc.
-  period: string; // e.g. "2026-2027", "2025-2026", etc.
+  shortName: string;
+  period: string;
   homeClub: string;
   theme: string;
   photoUrl: string;
@@ -30,7 +30,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2026-2027",
     homeClub: "Rotary Club La Serena",
     theme: "Unidos Para Hacer El Bien",
-    photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "", // Dejado sin foto genérica
     bio: "Ingeniero Civil y rotario desde hace 24 años. Ha liderado múltiples comités distritales de La Fundación Rotaria y proyectos de desarrollo hídrico en la Región de Coquimbo.",
     letters: [
       {
@@ -61,7 +61,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2025-2026",
     homeClub: "Rotary Club Valparaíso",
     theme: "La Magia de Rotary en Cada Rincón",
-    photoUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Médica Pediatra y destacada líder comunitaria. Impulsó durante su gobernación la erradicación de la violencia intrafamiliar y grandes operativos de salud infantil.",
     letters: [
       {
@@ -92,7 +92,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2024-2025",
     homeClub: "Rotary Club Viña del Mar",
     theme: "Crea Esperanza en el Mundo",
-    photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Empresario y académico universitario. Fomentó la sustentabilidad financiera de los clubes y la digitalización de las actas y capacitaciones distritales.",
     letters: [
       {
@@ -114,7 +114,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2023-2024",
     homeClub: "Rotary Club Antofagasta",
     theme: "Imagina Rotary",
-    photoUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Abogado y docente de Derecho Constitucional. Reconocido por modernizar los reglamentos internos del distrito y promover la ética profesional en el servicio.",
     letters: [
       {
@@ -136,7 +136,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2022-2023",
     homeClub: "Rotary Club Iquique",
     theme: "Servir Para Cambiar Vidas",
-    photoUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Contador Auditor con más de 30 años de rotarismo. Impulsó la transparencia contable y la creación de 4 nuevos clubes satélite en Tarapacá y Atacama.",
     letters: [
       {
@@ -158,7 +158,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2021-2022",
     homeClub: "Rotary Club Quilpué",
     theme: "Rotary Abre Oportunidades",
-    photoUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Profesor de Estado y escritor. Lideró la respuesta solidaria durante los tiempos de pandemia, promoviendo ollas comunes, ventiladores mecánicos y conectividad escolar.",
     letters: [
       {
@@ -180,7 +180,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2020-2021",
     homeClub: "Rotary Club Arica",
     theme: "Rotary Conecta el Mundo",
-    photoUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Arquitecto urbanista. Desarrolló el plan maestro de sedes rotarias sustentables e impulsó los comités binacionales de paz con el sur de Perú y Bolivia.",
     letters: [
       {
@@ -202,7 +202,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2019-2020",
     homeClub: "Rotary Club Copiapó",
     theme: "Sé la Inspiración",
-    photoUrl: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Geólogo y consultor minero. Dedicó su periodo a la protección de las cuencas desérticas y la provisión de agua potable en asentamientos rurales de Atacama.",
     letters: [
       {
@@ -224,7 +224,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2018-2019",
     homeClub: "Rotary Club San Felipe",
     theme: "Rotary Marca la Diferencia",
-    photoUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Farmacéutica y primera mujer gobernadora en la historia del Distrito 4320. Pionera en el fomento del liderazgo femenino rotario en Chile.",
     letters: [
       {
@@ -246,7 +246,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2017-2018",
     homeClub: "Rotary Club Calama",
     theme: "Rotary al Servicio de la Humanidad",
-    photoUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Técnico en Telecomunicaciones. Impulsó la conectividad radial de emergencia entre los clubes rotarios del norte chileno para situaciones de catástrofe.",
     letters: [
       {
@@ -268,7 +268,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2016-2017",
     homeClub: "Rotary Club Coquimbo",
     theme: "Rotary al Servicio de la Comunidad",
-    photoUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Asistente Social y gestora cultural. Lideró los fondos de emergencia para damnificados tras el terremoto y tsunami de Coquimbo en 2015.",
     letters: [
       {
@@ -290,7 +290,7 @@ export const GOVERNORS_DATA: Governor[] = [
     period: "2015-2016",
     homeClub: "Rotary Club Ovalle",
     theme: "Enriquece el Mundo",
-    photoUrl: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?q=80&w=600&auto=format&fit=crop",
+    photoUrl: "",
     bio: "Agrónomo e investigador agrícola. Fomentó el intercambio de jóvenes (RYE) y la creación de bosques nativos rotarios en el Valle del Limarí.",
     letters: [
       {
