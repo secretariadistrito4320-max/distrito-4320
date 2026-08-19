@@ -6,7 +6,6 @@ const API_URL = process.env.NEXT_PUBLIC_SHEETS_API_URL || 'https://script.google
 export async function getNews(): Promise<NewsItem[]> {
   try {
     const res = await fetch(API_URL, {
-      // Revalida datos en el servidor o durante el build
       next: { revalidate: 60 }
     });
 
@@ -17,13 +16,10 @@ export async function getNews(): Promise<NewsItem[]> {
 
     const data = await res.json();
 
-    // Si el sheet está vacío o no es un arreglo válido, usamos mockData
     if (!Array.isArray(data) || data.length === 0) {
-      console.info('El Google Sheet está vacío o no retornó filas. Cargando datos por defecto.');
       return rawMockData as NewsItem[];
     }
 
-    // Normalizar datos recibidos de Google Sheets para que coincidan con la interfaz NewsItem
     return data.map((item: Record<string, string>, index: number) => ({
       id: item.id || `sheet-news-${index}`,
       title: item.title || 'Sin Título',
