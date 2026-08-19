@@ -8,6 +8,9 @@ export interface Club {
   email?: string;
   charterDate?: string;
   anniversaryDayMonth?: string;
+  meetingDay?: string;
+  meetingTime?: string;
+  meetingPlace?: string;
 }
 
 export type RotaryClub = Club;
