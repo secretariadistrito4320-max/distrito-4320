@@ -2,7 +2,8 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import NewsCard, { NewsItem } from './NewsCard';
-import { Search, Filter, Newspaper, Sparkles, ChevronDown } from 'lucide-react';
+import { Search, Filter, Newspaper, Sparkles, ChevronDown, RefreshCw } from 'lucide-react';
+import { SHEETS_API_URL, parseNewsData } from '@/lib/getNews';
 
 interface NewsSectionProps {
   initialNews: NewsItem[];
@@ -15,10 +16,35 @@ export default function NewsSection({
   preselectedClubId = 'Todos',
   hideClubFilter = false
 }: NewsSectionProps) {
+  const [allNews, setAllNews] = useState<NewsItem[]>(initialNews);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
   const [selectedClub, setSelectedClub] = useState(preselectedClubId);
   const [visibleCount, setVisibleCount] = useState(20);
+
+  // Revalidación directa en vivo desde el navegador
+  useEffect(() => {
+    async function fetchLiveNews() {
+      try {
+        setLoading(true);
+        const res = await fetch(SHEETS_API_URL, { method: 'GET', redirect: 'follow' });
+        if (!res.ok) return;
+        const text = await res.text();
+        if (text.trim().startsWith('<')) return;
+        const data = JSON.parse(text);
+        if (Array.isArray(data) && data.length > 0) {
+          setAllNews(parseNewsData(data));
+        }
+      } catch (err) {
+        console.warn('Error al cargar noticias en vivo:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchLiveNews();
+  }, []);
 
   useEffect(() => {
     if (preselectedClubId) {
@@ -28,16 +54,16 @@ export default function NewsSection({
 
   const clubList = useMemo(() => {
     const clubsMap = new Map<string, string>();
-    initialNews.forEach((item) => {
+    allNews.forEach((item) => {
       if (item.clubId && item.clubName && item.clubId !== 'distrital') {
         clubsMap.set(item.clubId, item.clubName);
       }
     });
     return Array.from(clubsMap.entries()).map(([id, name]) => ({ id, name }));
-  }, [initialNews]);
+  }, [allNews]);
 
   const filteredNews = useMemo(() => {
-    const sorted = [...initialNews].sort((a, b) => {
+    const sorted = [...allNews].sort((a, b) => {
       const dateA = new Date(a.date).getTime() || 0;
       const dateB = new Date(b.date).getTime() || 0;
       return dateB - dateA;
@@ -57,7 +83,7 @@ export default function NewsSection({
 
       return matchesSearch && matchesCategory && matchesClub;
     });
-  }, [initialNews, searchTerm, selectedCategory, selectedClub]);
+  }, [allNews, searchTerm, selectedCategory, selectedClub]);
 
   const handleFilterChange = (type: 'category' | 'club', value: string) => {
     if (type === 'category') setSelectedCategory(value);
@@ -89,9 +115,12 @@ export default function NewsSection({
             </p>
           </div>
 
-          <div className="text-xs font-semibold text-slate-500 self-start md:self-end">
-            Mostrando <strong className="text-[#00246C]">{visibleNews.length}</strong> de{' '}
-            <strong className="text-[#00246C]">{filteredNews.length}</strong> publicaciones
+          <div className="text-xs font-semibold text-slate-500 self-start md:self-end flex items-center gap-2">
+            {loading && <RefreshCw className="w-3.5 h-3.5 text-[#00246C] animate-spin" />}
+            <span>
+              Mostrando <strong className="text-[#00246C]">{visibleNews.length}</strong> de{' '}
+              <strong className="text-[#00246C]">{filteredNews.length}</strong> publicaciones
+            </span>
           </div>
         </div>
 
