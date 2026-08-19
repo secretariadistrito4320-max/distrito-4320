@@ -1,24 +1,22 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Mail,
-  Phone,
   MapPin,
   Heart,
   Globe,
   ExternalLink,
-  ShieldCheck,
-  Award,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  UserCheck
 } from 'lucide-react';
-import RotaryWheelLogo from './RotaryWheelLogo';
 
 export default function Footer() {
   return (
     <footer className="w-full bg-[#001744] text-slate-300 border-t-4 border-[#F7A81B] text-xs">
       
-      {/* 4-Way Test Featured Banner */}
+      {/* 1. PRUEBA CUÁDRUPLE (CÓDIGO DE ÉTICA ROTARIA) */}
       <div className="bg-[#00246C] text-white py-6 border-b border-blue-900/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-4">
@@ -59,13 +57,23 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Main Footer Links */}
+      {/* 2. MAIN FOOTER CONTENT */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           
-          {/* Column 1: Identity & Statement */}
+          {/* Column 1: Identity & Official Logo */}
           <div className="lg:col-span-2 space-y-4">
-            <RotaryWheelLogo variant="light" showSubtitle={true} />
+            <Link href="/" className="inline-block">
+              <div className="relative w-56 h-16 sm:w-64 sm:h-20">
+                <Image
+                  src="/images/logo-rotary_2.png"
+                  alt="Rotary Distrito 4320"
+                  fill
+                  sizes="256px"
+                  className="object-contain object-left"
+                />
+              </div>
+            </Link>
             <p className="text-xs text-slate-300 leading-relaxed max-w-md">
               El <strong className="text-white">Distrito 4320 de Rotary International</strong> reúne a líderes y personas de acción de las regiones de Arica y Parinacota, Tarapacá, Antofagasta, Atacama, Coquimbo, Valparaíso y el territorio especial de Rapa Nui, unidos para servir con integridad y transformar positivamente nuestras comunidades.
             </p>
@@ -89,11 +97,6 @@ export default function Footer() {
               <li>
                 <Link href="/clubes" className="hover:text-[#F7A81B] transition-colors flex items-center gap-1.5">
                   <ChevronRight className="w-3 h-3 text-[#F7A81B]" /> Directorio de Clubes
-                </Link>
-              </li>
-              <li>
-                <Link href="/clubes/aniversarios" className="hover:text-[#F7A81B] transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3 h-3 text-[#F7A81B]" /> Aniversarios de Clubes
                 </Link>
               </li>
               <li>
@@ -130,24 +133,19 @@ export default function Footer() {
                   <ChevronRight className="w-3 h-3 text-[#F7A81B]" /> Balances y Auditorías
                 </Link>
               </li>
-              <li>
-                <Link href="/clubes/cartas-constitutivas" className="hover:text-[#F7A81B] transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3 h-3 text-[#F7A81B]" /> Cartas Constitutivas
-                </Link>
-              </li>
             </ul>
           </div>
 
           {/* Column 4: Contacto Oficial */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-white border-b border-blue-900/80 pb-2">
-              Secretaría Distrital
+              Contacto Distrital
             </h4>
-            <div className="space-y-2 text-xs text-slate-300">
+            <div className="space-y-2.5 text-xs text-slate-300">
               <div className="flex items-start gap-2">
                 <Mail className="w-3.5 h-3.5 text-[#F7A81B] mt-0.5 flex-shrink-0" />
                 <div>
-                  <span className="block text-slate-400 text-[10px]">Envío de Actividades:</span>
+                  <span className="block text-slate-400 text-[10px]">Secretaría Distrital:</span>
                   <a
                     href="mailto:secretaria@rotary4320.cl"
                     className="text-[#F7A81B] hover:underline font-semibold"
@@ -156,10 +154,11 @@ export default function Footer() {
                   </a>
                 </div>
               </div>
+
               <div className="flex items-start gap-2">
-                <Mail className="w-3.5 h-3.5 text-[#F7A81B] mt-0.5 flex-shrink-0" />
+                <UserCheck className="w-3.5 h-3.5 text-[#F7A81B] mt-0.5 flex-shrink-0" />
                 <div>
-                  <span className="block text-slate-400 text-[10px]">Tesorería y Pagos:</span>
+                  <span className="block text-slate-400 text-[10px]">Tesorería (Lilian Correa F.):</span>
                   <a
                     href="mailto:tesoreria@rotary4320.cl"
                     className="text-[#F7A81B] hover:underline font-semibold"
@@ -168,6 +167,7 @@ export default function Footer() {
                   </a>
                 </div>
               </div>
+
               <div className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-[#F7A81B] mt-0.5 flex-shrink-0" />
                 <span>Chile (Arica a Valparaíso / Rapa Nui)</span>
@@ -177,14 +177,14 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Bar: Copyright & Rotary International Affiliation */}
+        {/* Bottom Bar: Copyright & Links */}
         <div className="mt-10 pt-6 border-t border-blue-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
           <div>
             © {new Date().getFullYear()} Rotary International Distrito 4320 - Chile. Todos los derechos reservados.
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="https://www.rotary.org"
+              href="https://www.rotary.org/es-mx"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors inline-flex items-center gap-1"
