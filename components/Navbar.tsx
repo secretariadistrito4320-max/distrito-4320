@@ -90,11 +90,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* LOGO (Corregido a la raíz de public) */}
+          {/* LOGO (Ruta corregida apuntando a /images/logo-rotary_2.png) */}
           <Link href="/" className="flex items-center py-2 flex-shrink-0 h-full">
             <div className="relative w-44 h-12 sm:w-60 sm:h-14 lg:w-72 lg:h-16">
               <Image
-                src="/logo-rotary_2.png" 
+                src="/images/logo-rotary_2.png" 
                 alt="Rotary Distrito 4320"
                 fill
                 priority
