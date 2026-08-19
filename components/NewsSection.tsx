@@ -1,217 +1,194 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, Newspaper, Sparkles, Building2, RefreshCw } from 'lucide-react';
 import NewsCard, { NewsItem } from './NewsCard';
-import { CLUBS_DATA } from '@/data/clubsData';
+import { Search, Filter, Newspaper, Sparkles, ChevronDown } from 'lucide-[#F7A81B]' ? 'lucide-react' : 'lucide-react';
+import { Search as SearchIcon, Filter as FilterIcon, Newspaper as NewspaperIcon, Sparkles as SparklesIcon, ChevronDown as ChevronDownIcon } from 'lucide-react';
 
 interface NewsSectionProps {
   initialNews: NewsItem[];
-  preselectedClubId?: string;
-  hideClubFilter?: boolean;
 }
 
-const CATEGORIES = [
-  'Todos',
-  'Polio',
-  'Comunidad',
-  'Proyectos',
-  'Noticias',
-  'Cartas GD',
-];
+export default function NewsSection({ initialNews = [] }: NewsSectionProps) {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedClub, setSelectedClub] = useState('Todos');
+  const [visibleCount, setVisibleCount] = useState(20); // Muestra 20 inicialmente
 
-export default function NewsSection({
-  initialNews,
-  preselectedClubId,
-  hideClubFilter = false,
-}: NewsSectionProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
-  const [selectedClub, setSelectedClub] = useState<string>(preselectedClubId || 'todos');
-  const [searchTerm, setSearchTerm] = useState<string>('');
-
-  const filteredNews = useMemo(() => {
-    return initialNews.filter((item) => {
-      // Category match
-      const categoryMatch =
-        selectedCategory === 'Todos' ||
-        item.category.toLowerCase() === selectedCategory.toLowerCase();
-
-      // Club match
-      const clubMatch =
-        selectedClub === 'todos' ||
-        item.clubId.toLowerCase() === selectedClub.toLowerCase();
-
-      // Search term match
-      const searchMatch =
-        searchTerm === '' ||
-        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.clubName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.author.toLowerCase().includes(searchTerm.toLowerCase());
-
-      return categoryMatch && clubMatch && searchMatch;
+  // 1. Obtener lista única de clubes existentes para el filtro
+  const clubList = useMemo(() => {
+    const clubsMap = new Map<string, string>();
+    initialNews.forEach((item) => {
+      if (item.clubId && item.clubName && item.clubId !== 'distrital') {
+        clubsMap.set(item.clubId, item.clubName);
+      }
     });
-  }, [initialNews, selectedCategory, selectedClub, searchTerm]);
+    return Array.from(clubsMap.entries()).map(([id, name]) => ({ id, name }));
+  }, [initialNews]);
 
-  const featuredArticle = filteredNews.length > 0 ? filteredNews[0] : null;
-  const secondaryArticles = filteredNews.length > 1 ? filteredNews.slice(1) : [];
+  // 2. Filtrar y Ordenar (Más recientes primero)
+  const filteredNews = useMemo(() => {
+    // Ordenar de más reciente a más antigua
+    const sorted = [...initialNews].sort((a, b) => {
+      const dateA = new Date(a.date).getTime() || 0;
+      const dateB = new Date(b.date).getTime() || 0;
+      return dateB - dateA;
+    });
 
-  const handleResetFilters = () => {
-    setSelectedCategory('Todos');
-    setSelectedClub('todos');
-    setSearchTerm('');
+    return sorted.filter((news) => {
+      const matchesSearch =
+        news.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        news.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        news.clubName.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategory === 'Todos' || news.category.toLowerCase() === selectedCategory.toLowerCase();
+
+      const matchesClub =
+        selectedClub === 'Todos' || news.clubId === selectedClub;
+
+      return matchesSearch && matchesCategory && matchesClub;
+    });
+  }, [initialNews, searchTerm, selectedCategory, selectedClub]);
+
+  // Resetear la paginación al cambiar filtros
+  const handleFilterChange = (type: 'category' | 'club', value: string) => {
+    if (type === 'category') setSelectedCategory(value);
+    if (type === 'club') setSelectedClub(value);
+    setVisibleCount(20);
   };
+
+  const categories = ['Todos', 'Noticias', 'Polio', 'Comunidad', 'Proyectos', 'Cartas GD'];
+
+  // Cortar el arreglo para mostrar solo las 'visibleCount' noticias
+  const visibleNews = filteredNews.slice(0, visibleCount);
+  const featuredNews = visibleNews[0];
+  const gridNews = visibleNews.slice(1);
 
   return (
     <section className="w-full py-12 sm:py-16 bg-[#F8FAFC]" id="noticias-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
+        {/* Encabezado */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-[#00246C] text-xs font-bold uppercase tracking-wider mb-2">
-              <Newspaper className="w-3.5 h-3.5 text-[#00246C]" />
+              <NewspaperIcon className="w-3.5 h-3.5 text-[#00246C]" />
               <span>Portal de Noticias e Información Actualizada</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-[#00246C] tracking-tight">
               Actividades y Proyectos del Distrito 4320
             </h2>
-            <p className="text-slate-600 text-sm mt-1">
+            <p className="text-slate-600 text-xs sm:text-sm mt-1">
               Conoce las obras de servicio, donaciones y testimonios rotarios en nuestras comunidades.
             </p>
           </div>
 
-          <div className="text-xs text-slate-500 font-medium">
-            Mostrando <strong className="text-[#00246C] font-bold">{filteredNews.length}</strong> publicaciones
+          <div className="text-xs font-semibold text-slate-500 self-start md:self-end">
+            Mostrando <strong className="text-[#00246C]">{visibleNews.length}</strong> de{' '}
+            <strong className="text-[#00246C]">{filteredNews.length}</strong> publicaciones
           </div>
         </div>
 
-        {/* Filter Controls Bar */}
-        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm mb-10 space-y-4">
-          
-          {/* Top row: Search input + Club selector */}
+        {/* Barra de Filtros */}
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             
-            {/* Search */}
-            <div className="md:col-span-6 lg:col-span-7 relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            {/* Buscador */}
+            <div className="md:col-span-7 relative">
+              <SearchIcon className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
               <input
                 type="text"
                 placeholder="Buscar por título, contenido, autor o ciudad..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] focus:bg-white text-slate-800 transition-all placeholder-slate-400"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setVisibleCount(20);
+                }}
+                className="w-full pl-9 pr-4 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] text-slate-800"
               />
-              {searchTerm && (
-                <button
-                  type="button"
-                  onClick={() => setSearchTerm('')}
-                  className="absolute right-3 top-3 text-xs text-slate-400 hover:text-slate-700"
-                >
-                  ✕
-                </button>
-              )}
             </div>
 
-            {/* Club Filter Selector */}
-            {!hideClubFilter && (
-              <div className="md:col-span-6 lg:col-span-5 relative">
-                <Building2 className="w-4 h-4 text-slate-400 absolute left-3.5 top-3 pointer-events-none" />
-                <select
-                  value={selectedClub}
-                  onChange={(e) => setSelectedClub(e.target.value)}
-                  className="w-full pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] focus:bg-white text-slate-800 transition-all cursor-pointer font-medium appearance-none"
-                >
-                  <option value="todos">Todos los Clubes del Distrito</option>
-                  <option value="distrital">Gobernación / Distrito 4320</option>
-                  {CLUBS_DATA.map((club) => (
-                    <option key={club.id} value={club.id}>
-                      {club.name} ({club.region})
-                    </option>
-                  ))}
-                </select>
-                <Filter className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3.5 pointer-events-none" />
-              </div>
-            )}
-
-          </div>
-
-          {/* Bottom row: Category Pills + Reset */}
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="text-xs font-bold text-slate-500 mr-1 hidden sm:inline">
-                Categoría:
-              </span>
-              {CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory.toLowerCase() === cat.toLowerCase();
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#00246C] text-[#F7A81B] shadow-sm'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-
-            {(selectedCategory !== 'Todos' || selectedClub !== 'todos' || searchTerm !== '') && (
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="text-xs font-semibold text-red-600 hover:text-red-800 hover:underline inline-flex items-center gap-1 cursor-pointer"
+            {/* Filtro por Club */}
+            <div className="md:col-span-5 relative">
+              <FilterIcon className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+              <select
+                value={selectedClub}
+                onChange={(e) => handleFilterChange('club', e.target.value)}
+                className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] text-slate-800 appearance-none font-medium cursor-pointer"
               >
-                <RefreshCw className="w-3 h-3" />
-                <span>Limpiar filtros</span>
-              </button>
-            )}
+                <option value="Todos">Todos los Clubes del Distrito ({clubList.length})</option>
+                {clubList.map((club) => (
+                  <option key={club.id} value={club.id}>
+                    {club.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDownIcon className="w-4 h-4 absolute right-3 top-3 text-slate-400 pointer-events-none" />
+            </div>
+
           </div>
 
+          {/* Categorías */}
+          <div className="flex items-center gap-2 overflow-x-auto pt-1 pb-0.5 custom-scrollbar">
+            <span className="text-xs font-bold text-slate-500 whitespace-nowrap mr-1">Categoría:</span>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => handleFilterChange('category', cat)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  selectedCategory === cat
+                    ? 'bg-[#00246C] text-[#F7A81B] shadow-sm'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Results Stream */}
+        {/* Lista de Noticias */}
         {filteredNews.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 shadow-sm max-w-lg mx-auto">
-            <div className="w-12 h-12 rounded-full bg-blue-50 text-[#00246C] flex items-center justify-center mx-auto mb-4">
-              <Search className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-800 mb-1">
-              No se encontraron noticias con estos criterios
-            </h3>
-            <p className="text-xs text-slate-500 mb-5">
-              Intenta seleccionar otra categoría o restablecer los términos de búsqueda.
-            </p>
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="px-4 py-2 rounded-lg bg-[#00246C] text-white text-xs font-bold hover:bg-blue-900 transition-colors cursor-pointer"
-            >
-              Restablecer todos los filtros
-            </button>
+          <div className="text-center py-16 bg-white rounded-2xl border border-slate-200 p-8">
+            <NewspaperIcon className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+            <h3 className="text-base font-bold text-slate-700">No se encontraron publicaciones</h3>
+            <p className="text-xs text-slate-500 mt-1">Intenta ajustando los términos de búsqueda o los filtros.</p>
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Featured Hero Article */}
-            {featuredArticle && (
+            
+            {/* Noticia Destacada Principal */}
+            {featuredNews && (
               <div className="w-full">
-                <NewsCard news={featuredArticle} featured={true} />
+                <NewsCard news={featuredNews} isFeatured={true} />
               </div>
             )}
 
-            {/* Secondary 3-Column Grid */}
-            {secondaryArticles.length > 0 && (
+            {/* Grilla de Noticias */}
+            {gridNews.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {secondaryArticles.map((item) => (
-                  <NewsCard key={item.id} news={item} />
+                {gridNews.map((news) => (
+                  <NewsCard key={news.id} news={news} />
                 ))}
               </div>
             )}
+
+            {/* Botón Cargar Más */}
+            {visibleCount < filteredNews.length && (
+              <div className="text-center pt-6">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((prev) => prev + 20)}
+                  className="px-6 py-3 rounded-xl bg-[#00246C] hover:bg-blue-900 text-white font-bold text-xs sm:text-sm transition-all shadow-md inline-flex items-center gap-2 active:scale-95 cursor-pointer"
+                >
+                  <SparklesIcon className="w-4 h-4 text-[#F7A81B]" />
+                  <span>Cargar más publicaciones ({filteredNews.length - visibleCount} restantes)</span>
+                </button>
+              </div>
+            )}
+
           </div>
         )}
 
