@@ -18,6 +18,8 @@ import { CLUBS_DATA } from '@/data/clubsData';
 import { GOVERNORS_DATA } from '@/data/governorsData';
 import { getNews } from '@/lib/getNews';
 
+export const revalidate = 60;
+
 const currentGovernor = GOVERNORS_DATA[0]; // Carlos Tapia Gómez 2026-2027
 
 export default async function HomePage() {
