@@ -15,6 +15,7 @@ import {
   Users,
   CreditCard,
   FileText,
+  Home,
   ExternalLink,
   ChevronRight,
   ShieldCheck,
@@ -25,9 +26,7 @@ import {
   Calendar,
   CheckCircle2,
   Facebook,
-  Youtube,
-  Copy,
-  Check
+  Youtube
 } from 'lucide-react';
 import { CLUBS_DATA } from '@/data/clubsData';
 import { GOVERNORS_DATA } from '@/data/governorsData';
@@ -42,11 +41,6 @@ export default function Navbar() {
   const [cartasOpen, setCartasOpen] = useState(false);
   const [carteleraOpen, setCarteleraOpen] = useState(false);
   const [searchClubTerm, setSearchClubTerm] = useState('');
-
-  // Estados para feedbacks de copiado
-  const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedRotaryOrg, setCopiedRotaryOrg] = useState(false);
-  const [copiedMyRotary, setCopiedMyRotary] = useState(false);
 
   // Refs para Click Outside
   const sobreRotaryRef = useRef<HTMLDivElement>(null);
@@ -94,17 +88,8 @@ export default function Navbar() {
     club.region.toLowerCase().includes(searchClubTerm.toLowerCase())
   );
 
-  // Funciones para copiar al portapapeles
-  const handleCopy = async (text: string, setCopied: React.Dispatch<React.SetStateAction<boolean>>) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Error al copiar: ', err);
-    }
-  };
-
+  // Estados activos de ruta
+  const isInicioActive = pathname === '/';
   const isClubesActive = pathname.startsWith('/clubes');
   const isCartasActive = pathname.startsWith('/cartas-gd');
   const isEgdActive = pathname === '/listado-egd-4320';
@@ -115,78 +100,114 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full font-sans bg-[#00246C] text-white shadow-xl border-b border-[#001744]" id="main-rotary-navbar">
       
       {/* =================================================== */}
-      {/* 1. TOP BAR LIGERO (Redes Sociales y Textos de Copiar)*/}
+      {/* 1. PRIMERA LÍNEA (Correo y Redes Sociales)            */}
       {/* =================================================== */}
-      <div className="w-full bg-[#001744] border-b border-blue-900/60 py-2.5 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="w-full bg-[#001744] py-3 text-xs border-b border-blue-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-end gap-6 text-blue-200">
           
-          <div className="flex items-center gap-2 text-blue-200">
+          <div className="flex items-center gap-2">
             <Mail className="w-4 h-4 text-[#F7A81B]" />
-            <span>Envía las actividades de tu club a </span>
-            <button
-              onClick={() => handleCopy('secretaria@rotary4320.cl', setCopiedEmail)}
-              className="font-bold text-[#F7A81B] hover:underline flex items-center gap-1 transition-all"
-              title="Copiar correo al portapapeles"
-            >
-              secretaria@rotary4320.cl
-              {copiedEmail ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5 opacity-60" />}
-            </button>
-            <span className="hidden sm:inline"> y las compartiremos con el mundo.</span>
+            <span>
+              Envía las actividades de tu club a{' '}
+              <a href="mailto:secretaria@rotary4320.cl" className="text-[#F7A81B] font-bold hover:underline">
+                secretaria@rotary4320.cl
+              </a>{' '}
+              y las compartiremos con el mundo.
+            </span>
           </div>
 
-          <div className="flex items-center gap-5 text-blue-200">
-            {/* Redes Sociales Oficiales */}
-            <div className="flex items-center gap-3 border-r border-blue-800 pr-5">
-              <a href="https://www.facebook.com/rotary4320" target="_blank" rel="noopener noreferrer" className="hover:text-[#F7A81B] transition-colors">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="https://www.youtube.com/@Rotary4320" target="_blank" rel="noopener noreferrer" className="hover:text-[#F7A81B] transition-colors">
-                <Youtube className="w-4 h-4" />
-              </a>
-            </div>
-
-            {/* Enlaces Rápidos con función de copia */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => handleCopy('https://www.rotary.org/es-mx', setCopiedRotaryOrg)}
-                className="hover:text-[#F7A81B] transition-colors flex items-center gap-1.5 font-medium"
-                title="Copiar enlace oficial de Rotary"
-              >
-                <Globe className="w-3.5 h-3.5 text-blue-400" />
-                <span>Rotary.org</span>
-                {copiedRotaryOrg ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3 opacity-60" />}
-              </button>
-
-              <button
-                onClick={() => handleCopy('https://my.rotary.org/es', setCopiedMyRotary)}
-                className="hover:text-[#F7A81B] transition-colors flex items-center gap-1.5 font-medium"
-                title="Copiar enlace a My Rotary"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                <span>My Rotary</span>
-                {copiedMyRotary ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3 opacity-60" />}
-              </button>
-            </div>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://www.facebook.com/rotary4320"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#F7A81B] transition-colors"
+              aria-label="Facebook del Distrito 4320"
+            >
+              <Facebook className="w-4 h-4" />
+            </a>
+            <a
+              href="https://www.youtube.com/@Rotary4320"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#F7A81B] transition-colors"
+              aria-label="YouTube del Distrito 4320"
+            >
+              <Youtube className="w-4 h-4" />
+            </a>
           </div>
 
         </div>
       </div>
 
       {/* =================================================== */}
-      {/* 2. NAVBAR PRINCIPAL CON LOGO PNG (Sin Invert)        */}
+      {/* 2. SEGUNDA LÍNEA (Lema y Links Externos)              */}
+      {/* =================================================== */}
+      <div className="w-full bg-[#00246C] border-b border-blue-900/60 py-2 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
+          
+          <div className="flex items-center gap-2 text-blue-100/90 text-center sm:text-left">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#F7A81B] text-[#00246C] font-black text-[10px] uppercase">
+              <Sparkles className="w-3 h-3 fill-current" />
+              Lema 2026-2027
+            </span>
+            <span className="hidden md:inline font-semibold text-[11px]">Genera un Impacto Duradero · Rotary Distrito 4320</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-blue-200">
+            <a
+              href="https://www.rotary.org/es-mx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#F7A81B] transition-colors flex items-center gap-1 font-medium text-[11px]"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#F7A81B]" />
+              <span>Rotary.org</span>
+              <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+            </a>
+
+            <span className="text-blue-800">•</span>
+
+            <a
+              href="https://my.rotary.org/es"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#F7A81B] transition-colors flex items-center gap-1 font-medium text-[11px]"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-[#F7A81B]" />
+              <span>My Rotary</span>
+              <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+            </a>
+
+            <span className="text-blue-800 hidden sm:inline">•</span>
+
+            <a
+              href="mailto:secretaria@rotary4320.cl"
+              className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-blue-900/80 hover:bg-blue-800 text-white text-[11px] font-bold transition-all border border-blue-700/50"
+            >
+              <Mail className="w-3 h-3 text-[#F7A81B]" />
+              <span>secretaria@rotary4320.cl</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      {/* =================================================== */}
+      {/* 3. TERCERA LÍNEA (Logo PNG 16:9 y Navbar Principal)   */}
       {/* =================================================== */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-20 sm:h-24">
           
-          {/* Logo Oficial Rotary Distrito 4320 */}
-          <Link href="/" className="flex items-center py-2 flex-shrink-0">
-            <div className="relative w-48 h-12 sm:w-56 sm:h-14">
+          {/* Logo Oficial Rotary Distrito 4320 (Formato 16:9 ajustado) */}
+          <Link href="/" className="flex items-center gap-3 group py-2 flex-shrink-0 h-full">
+            <div className="relative w-56 h-14 sm:w-72 sm:h-20 lg:w-80 lg:h-24">
               <Image
-                src="/images/logo-rotary.png" // Asegúrate que el logo png blanco esté aquí
+                src="/logo-rotary_2.png" 
                 alt="Rotary Distrito 4320"
                 fill
                 priority
-                sizes="240px"
+                sizes="(max-width: 768px) 224px, (max-width: 1024px) 288px, 320px"
                 className="object-contain object-left"
               />
             </div>
@@ -195,13 +216,16 @@ export default function Navbar() {
           {/* Menú de Navegación de Escritorio */}
           <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs xl:text-sm font-bold tracking-wide">
             
+            {/* 1. QUIÉNES SOMOS */}
             <Link
               href="/#quienes-somos"
+              id="nav-link-quienes-somos"
               className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all"
             >
               Quiénes Somos
             </Link>
 
+            {/* 2. SOBRE ROTARY ▾ */}
             <div
               className="relative"
               ref={sobreRotaryRef}
@@ -210,8 +234,10 @@ export default function Navbar() {
             >
               <button
                 type="button"
+                id="nav-dropdown-sobre-rotary"
                 onClick={() => setSobreRotaryOpen(!sobreRotaryOpen)}
                 className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1 cursor-pointer"
+                aria-expanded={sobreRotaryOpen}
               >
                 <span>Sobre Rotary</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-[#F7A81B] transition-transform duration-200 ${sobreRotaryOpen ? 'rotate-180' : ''}`} />
@@ -243,7 +269,7 @@ export default function Navbar() {
                     >
                       <span className="flex items-center gap-2">
                         <Globe className="w-3.5 h-3.5 text-[#00246C]" />
-                        Link de Rotary
+                        Link d Rotary
                       </span>
                       <ExternalLink className="w-3 h-3 text-slate-400" />
                     </a>
@@ -264,6 +290,7 @@ export default function Navbar() {
               )}
             </div>
 
+            {/* 3. EL DISTRITO ▾ */}
             <div
               className="relative"
               ref={distritoRef}
@@ -272,12 +299,14 @@ export default function Navbar() {
             >
               <button
                 type="button"
+                id="nav-dropdown-distrito"
                 onClick={() => setDistritoOpen(!distritoOpen)}
                 className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
                   isClubesActive || isEgdActive || isPagosActive || isTransparenciaActive
                     ? 'bg-blue-900 text-[#F7A81B] font-bold shadow-inner'
                     : 'text-slate-100 hover:bg-[#001d57] hover:text-[#F7A81B]'
                 }`}
+                aria-expanded={distritoOpen}
               >
                 <Building2 className="w-4 h-4 text-[#F7A81B]" />
                 <span>EL DISTRITO</span>
@@ -286,6 +315,7 @@ export default function Navbar() {
 
               {distritoOpen && (
                 <div className="absolute left-0 mt-1 w-[540px] rounded-xl bg-white text-slate-800 shadow-2xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  
                   <div className="p-3 bg-slate-50 border-b border-slate-200 grid grid-cols-3 gap-2 text-xs">
                     <Link
                       href="/clubes"
@@ -360,10 +390,12 @@ export default function Navbar() {
                       <span>Transparencia</span>
                     </Link>
                   </div>
+
                 </div>
               )}
             </div>
 
+            {/* 4. CARTAS GD ▾ */}
             <div
               className="relative"
               ref={cartasRef}
@@ -372,12 +404,14 @@ export default function Navbar() {
             >
               <button
                 type="button"
+                id="nav-dropdown-cartas-gd"
                 onClick={() => setCartasOpen(!cartasOpen)}
                 className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
                   isCartasActive
                     ? 'bg-blue-900 text-[#F7A81B] font-bold shadow-inner'
                     : 'text-slate-100 hover:bg-[#001d57] hover:text-[#F7A81B]'
                 }`}
+                aria-expanded={cartasOpen}
               >
                 <Mail className="w-4 h-4 text-[#F7A81B]" />
                 <span>Cartas GD</span>
@@ -419,6 +453,7 @@ export default function Navbar() {
               )}
             </div>
 
+            {/* 5. CARTELERA ▾ */}
             <div
               className="relative"
               ref={carteleraRef}
@@ -427,8 +462,10 @@ export default function Navbar() {
             >
               <button
                 type="button"
+                id="nav-dropdown-cartelera"
                 onClick={() => setCarteleraOpen(!carteleraOpen)}
                 className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1 cursor-pointer"
+                aria-expanded={carteleraOpen}
               >
                 <CalendarDays className="w-4 h-4 text-[#F7A81B]" />
                 <span>Cartelera</span>
@@ -457,8 +494,10 @@ export default function Navbar() {
               )}
             </div>
 
+            {/* 6. NOTICIAS Y ARTÍCULOS DE CLUBES */}
             <Link
               href="/#noticias-section"
+              id="nav-link-noticias-clubes"
               className="px-3 py-2 rounded-xl bg-[#F7A81B] hover:bg-amber-400 text-[#00246C] font-extrabold text-xs transition-all shadow-md active:scale-95 ml-1"
             >
               Noticias y artículos de Clubes
@@ -470,8 +509,10 @@ export default function Navbar() {
           <div className="flex lg:hidden items-center">
             <button
               type="button"
+              id="mobile-menu-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-md text-white hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-[#F7A81B]"
+              aria-label="Abrir menú de navegación"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6 text-[#F7A81B]" />
@@ -485,7 +526,7 @@ export default function Navbar() {
       </div>
 
       {/* =================================================== */}
-      {/* 3. MENÚ MÓVIL DESPLEGABLE (DRAWER)                  */}
+      {/* 4. MENÚ MÓVIL DESPLEGABLE (DRAWER)                  */}
       {/* =================================================== */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#001d57] border-t border-blue-900 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-200 text-xs sm:text-sm font-semibold">
@@ -494,6 +535,7 @@ export default function Navbar() {
             Quiénes Somos
           </Link>
 
+          {/* Sección Sobre Rotary */}
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B] block px-1 pb-1 border-b border-blue-900">
               Sobre Rotary
@@ -505,13 +547,14 @@ export default function Navbar() {
               • Prueba cuádruple
             </Link>
             <a href="https://www.rotary.org/es-mx" target="_blank" rel="noopener noreferrer" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">
-              • Link de Rotary (Oficial) ↗
+              • Link d Rotary (Oficial) ↗
             </a>
             <a href="https://my.rotary.org/es" target="_blank" rel="noopener noreferrer" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">
               • Link My Rotary ↗
             </a>
           </div>
 
+          {/* Sección El Distrito */}
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B] block px-1 pb-1 border-b border-blue-900">
               El Distrito
@@ -536,6 +579,7 @@ export default function Navbar() {
             </Link>
           </div>
 
+          {/* Cartas GD */}
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
             <div className="flex items-center justify-between px-1 pb-1 border-b border-blue-900">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B]">
@@ -558,6 +602,7 @@ export default function Navbar() {
             </div>
           </div>
 
+          {/* Cartelera */}
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B] block px-1 pb-1 border-b border-blue-900">
               Cartelera
