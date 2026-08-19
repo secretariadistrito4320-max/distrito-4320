@@ -44,7 +44,7 @@ export default function PagosPage() {
           </div>
 
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Resumen oficial de los aranceles correspondientes al <strong>1er Semestre (Julio 2026 - Diciembre 2026)</strong> para los clubes rotarios pertenecientes al Distrito 4320[cite: 3].
+            Resumen oficial de los aranceles correspondientes al <strong>1er Semestre (Julio 2026 - Diciembre 2026)</strong> para los clubes rotarios pertenecientes al Distrito 4320.
           </p>
         </div>
 
@@ -59,7 +59,7 @@ export default function PagosPage() {
                 <h3 className="font-black text-lg text-[#00246C]">1. Rotary International</h3>
               </div>
               <p className="text-xs text-slate-500">
-                Factura enviada directamente por RI a la Directiva de cada Club y disponible en el portal <strong>My Rotary</strong>[cite: 3].
+                Factura enviada directamente por RI a la Directiva de cada Club y disponible en el portal <strong>My Rotary</strong>.
               </p>
 
               <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 text-xs">
@@ -75,7 +75,7 @@ export default function PagosPage() {
             </div>
 
             <div className="pt-2 text-[11px] text-slate-500 italic">
-              * Forma de Pago: En My Rotary (Club → Finanzas → Factura de Club → Pago con Tarjeta)[cite: 3].
+              * Forma de Pago: En My Rotary (Club → Finanzas → Factura de Club → Pago con Tarjeta).
             </div>
           </div>
 
@@ -104,11 +104,11 @@ export default function PagosPage() {
 
               <div className="bg-[#00246C] text-white p-4 rounded-2xl space-y-1.5 text-xs">
                 <span className="text-[10px] font-bold uppercase text-[#F7A81B] block">Datos para Transferencia Bancaria:</span>
-                <p><strong>Titular:</strong> Lilian Correa Fuentealba[cite: 3]</p>
-                <p><strong>Banco:</strong> Itaú Chile[cite: 3]</p>
-                <p><strong>Cuenta Corriente:</strong> 0231278863[cite: 3]</p>
-                <p><strong>RUT:</strong> 7.996.109-4[cite: 3]</p>
-                <p><strong>Email:</strong> likakofu@gmail.com[cite: 3]</p>
+                <p><strong>Titular:</strong> Lilian Correa Fuentealba</p>
+                <p><strong>Banco:</strong> Itaú Chile</p>
+                <p><strong>Cuenta Corriente:</strong> 0231278863</p>
+                <p><strong>RUT:</strong> 7.996.109-4</p>
+                <p><strong>Email:</strong> likakofu@gmail.com</p>
               </div>
             </div>
           </div>
@@ -130,11 +130,11 @@ export default function PagosPage() {
 
               <div className="bg-slate-900 text-white p-4 rounded-2xl space-y-1.5 text-xs">
                 <span className="text-[10px] font-bold uppercase text-[#F7A81B] block">Datos Transferencia Tesoreria CORGOR:</span>
-                <p><strong>Nombre:</strong> CORGOR[cite: 3]</p>
-                <p><strong>Banco:</strong> Banco Estado[cite: 3]</p>
-                <p><strong>Cuenta Corriente:</strong> 1372095918[cite: 3]</p>
-                <p><strong>RUT:</strong> 65.247.394-6[cite: 3]</p>
-                <p><strong>Email:</strong> bmartino@quiborax.com[cite: 3]</p>
+                <p><strong>Nombre:</strong> CORGOR</p>
+                <p><strong>Banco:</strong> Banco Estado</p>
+                <p><strong>Cuenta Corriente:</strong> 1372095918</p>
+                <p><strong>RUT:</strong> 65.247.394-6</p>
+                <p><strong>Email:</strong> bmartino@quiborax.com</p>
               </div>
             </div>
           </div>
@@ -148,12 +148,12 @@ export default function PagosPage() {
               </div>
 
               <p className="text-xs text-slate-600 leading-relaxed">
-                Aportes voluntarios y metas comprometidas por los socios o colaboradores del club[cite: 3].
+                Aportes voluntarios y metas comprometidas por los socios o colaboradores del club.
               </p>
 
               <div className="bg-amber-50 p-4 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
                 <span className="font-bold block">Instrucción:</span>
-                <p>En el sistema <strong>My Rotary</strong>, seleccionar opción <em>Dona</em> → Elegir actividad y realizar aporte con tarjeta de crédito[cite: 3].</p>
+                <p>En el sistema <strong>My Rotary</strong>, seleccionar opción <em>Dona</em> → Elegir actividad y realizar aporte con tarjeta de crédito.</p>
               </div>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function PagosPage() {
               <span>Reporte de Transferencias</span>
             </h3>
             <p className="text-xs text-blue-100 max-w-xl">
-              Una vez realizada la transferencia de Gobernación y Revista, enviar los comprobantes adjuntos a <strong>likakofu@gmail.com</strong> indicando el <strong>Nombre del Club</strong> y el motivo del pago[cite: 3].
+              Una vez realizada la transferencia de Gobernación y Revista, enviar los comprobantes adjuntos a <strong>likakofu@gmail.com</strong> indicando el <strong>Nombre del Club</strong> y el motivo del pago.
             </p>
           </div>
           <a
