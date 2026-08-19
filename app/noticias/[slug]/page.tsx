@@ -52,13 +52,24 @@ function formatArticleContent(rawContent: string): string {
 
   let formatted = rawContent;
 
-  // 1. Destacar subtítulos o lemas con margen superior e inferior holgado
+  // 1. Inyectar espaciado y estilos a todas las imágenes e incrustaciones HTML
   formatted = formatted.replace(
-    /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
-    '</p><h3 class="text-base sm:text-lg font-extrabold text-[#00246C] mt-10 mb-4 pt-4 border-t border-slate-200 tracking-tight">$1</h3><p>'
+    /<img /gi,
+    '<img class="my-8 sm:my-10 rounded-2xl shadow-md border border-slate-200 w-full object-cover block" '
   );
 
-  // 2. Si el texto viene en bloques planos, envolver en párrafos justificados
+  formatted = formatted.replace(
+    /<figure/gi,
+    '<figure class="my-8 sm:my-10 w-full overflow-hidden" '
+  );
+
+  // 2. Formatear lemas y subtítulos en mayúsculas
+  formatted = formatted.replace(
+    /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
+    '</p><h3 class="text-base sm:text-lg font-extrabold text-[#00246C] mt-10 mb-4 pt-4 border-t border-slate-200 tracking-tight block">$1</h3><p>'
+  );
+
+  // 3. Si el texto viene sin etiquetas HTML de párrafo, envolver por bloques
   if (!/<(p|div|h[1-6]|blockquote|section)/i.test(formatted)) {
     const paragraphs = formatted
       .replace(/\r\n/g, '\n')
@@ -69,11 +80,19 @@ function formatArticleContent(rawContent: string): string {
     if (paragraphs.length > 0) {
       formatted = paragraphs
         .map((p) => {
-          if (p.trim().startsWith('<h3')) return p;
+          if (p.trim().startsWith('<h3') || p.trim().startsWith('<img') || p.trim().startsWith('<figure')) {
+            return p;
+          }
           return `<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">${p.trim().replace(/\n/g, '<br/>')}</p>`;
         })
         .join('');
     }
+  } else {
+    // Si ya contiene <p>, asegurar estilo de texto justificado y margen inferior
+    formatted = formatted.replace(
+      /<p>/gi,
+      '<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">'
+    );
   }
 
   return formatted;
@@ -171,7 +190,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Cuerpo del Artículo Maquetado (Texto Justificado + Espaciado de Imágenes) */}
+          {/* Cuerpo del Artículo (Texto Justificado + Separación Amplia de Fotos) */}
           <div className="p-6 sm:p-10">
             <div
               className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed
@@ -179,13 +198,15 @@ export default async function NewsDetailPage({ params }: PageProps) {
                          prose-p:mb-6 prose-p:leading-relaxed prose-p:text-justify prose-p:text-pretty
                          prose-strong:text-[#00246C] prose-strong:font-bold
                          prose-a:text-[#00246C] prose-a:font-bold prose-a:underline hover:prose-a:text-amber-600
-                         prose-img:rounded-2xl prose-img:shadow-md prose-img:my-10 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-slate-200"
+                         prose-img:rounded-2xl prose-img:shadow-md prose-img:my-8 prose-img:sm:my-10 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-slate-200
+                         prose-figure:my-8 prose-figure:sm:my-10
+                         [&_p>img]:my-8 [&_p>img]:sm:my-10 [&_img+img]:mt-8 [&_figure]:my-8"
               dangerouslySetInnerHTML={{ __html: formattedHtml }}
             />
 
             {/* Galería Fotográfica Secundarias */}
             {galleryImages.length > 1 && (
-              <div className="mt-12 pt-8 border-t border-slate-200">
+              <div className="mt-14 pt-8 border-t border-slate-200">
                 <h3 className="text-lg font-bold text-[#00246C] mb-6 flex items-center gap-2">
                   <Images className="w-5 h-5 text-[#F7A81B]" />
                   <span>Galería Fotográfica de la Actividad</span>
