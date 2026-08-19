@@ -115,15 +115,19 @@ export default async function HomePage() {
                 </div>
 
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 border-2 border-[#00246C]">
-                    <Image
-                      src={currentGovernor.photoUrl}
-                      alt={currentGovernor.name}
-                      fill
-                      sizes="80px"
-                      referrerPolicy="no-referrer"
-                      className="object-cover"
-                    />
+                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-[#00246C] to-blue-900 flex items-center justify-center text-[#F7A81B] font-black text-xl sm:text-2xl border-2 border-[#00246C] flex-shrink-0 shadow-md">
+                    {currentGovernor.photoUrl ? (
+                      <Image
+                        src={currentGovernor.photoUrl}
+                        alt={currentGovernor.name}
+                        fill
+                        sizes="80px"
+                        referrerPolicy="no-referrer"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span>{currentGovernor.shortName.slice(0, 2).toUpperCase()}</span>
+                    )}
                   </div>
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
