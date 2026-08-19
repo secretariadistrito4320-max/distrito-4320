@@ -13,6 +13,9 @@ export interface Club {
   anniversaryDayMonth?: string;
 }
 
+// Alias para mantener compatibilidad con componentes que usan RotaryClub
+export type RotaryClub = Club;
+
 export const CLUBS_DATA: Club[] = [
   { id: "rc-arica", slug: "rc-arica", name: "Rotary Club Arica", city: "Arica", region: "Región de Arica y Parinacota", meetingDay: "Jueves", meetingTime: "20:30 hrs", meetingPlace: "Sede Rotaria Arica", charterDate: "1927-05-15", anniversaryDayMonth: "05-15" },
   { id: "rc-azapa", slug: "rc-azapa", name: "Rotary Club Azapa", city: "Arica", region: "Región de Arica y Parinacota", meetingDay: "Martes", meetingTime: "20:30 hrs", meetingPlace: "Valle de Azapa, Arica" },
