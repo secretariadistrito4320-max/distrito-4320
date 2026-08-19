@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, User, Building2, ArrowRight, Tag } from 'lucide-react';
+import Link from 'next/link';
+import { Calendar, Building2, ArrowRight, User } from 'lucide-react';
 
 export interface NewsItem {
   id: string;
@@ -16,170 +18,141 @@ export interface NewsItem {
   category: string;
   date: string;
   author: string;
+  gallery?: string;
 }
 
-interface NewsCardProps {
+export interface NewsCardProps {
   news: NewsItem;
   featured?: boolean;
 }
 
 export default function NewsCard({ news, featured = false }: NewsCardProps) {
-  const formattedDate = new Date(news.date + 'T00:00:00').toLocaleDateString('es-CL', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
-  const getCategoryColor = (cat: string) => {
-    switch (cat.toLowerCase()) {
-      case 'polio':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'proyectos':
-        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-      case 'comunidad':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'cartas gd':
-        return 'bg-amber-100 text-amber-900 border-amber-300';
-      default:
-        return 'bg-slate-100 text-slate-800 border-slate-200';
-    }
-  };
-
   if (featured) {
     return (
-      <article className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 gap-0">
-        
-        {/* Featured Image */}
-        <div className="relative lg:col-span-7 h-64 sm:h-80 lg:h-auto min-h-[280px] bg-slate-100 overflow-hidden">
+      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all grid grid-cols-1 lg:grid-cols-12 group">
+        {/* Foto de Portada Clickeable */}
+        <Link
+          href={`/noticias/${news.slug}`}
+          className="lg:col-span-7 relative aspect-video lg:aspect-auto w-full h-full min-h-[260px] bg-slate-900 overflow-hidden block cursor-pointer"
+        >
           <Image
             src={news.imageUrl}
             alt={news.title}
             fill
-            sizes="(max-width: 1024px) 100vw, 60vw"
-            referrerPolicy="no-referrer"
+            sizes="(max-width: 1024px) 100vw, 58vw"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border shadow-sm ${getCategoryColor(
-                news.category
-              )}`}
-            >
-              {news.category}
+          <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+            <span className="px-3 py-1 rounded-full bg-[#00246C] text-[#F7A81B] text-[10px] font-black uppercase tracking-wider shadow">
+              {news.category || 'Noticias'}
             </span>
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#00246C] text-[#F7A81B] shadow-sm">
+            <span className="px-3 py-1 rounded-full bg-[#F7A81B] text-[#00246C] text-[10px] font-extrabold uppercase tracking-wider shadow">
               Destacado Distrital
             </span>
           </div>
-        </div>
+        </Link>
 
-        {/* Featured Content */}
+        {/* Detalle */}
         <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-3 text-xs text-slate-500 mb-3 flex-wrap">
-              <span className="flex items-center gap-1.5 font-semibold text-[#00246C]">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+              <span className="flex items-center gap-1 font-semibold text-[#00246C]">
                 <Building2 className="w-3.5 h-3.5 text-[#F7A81B]" />
                 {news.clubName}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                {formattedDate}
+                {news.date}
               </span>
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-[#00246C] transition-colors leading-tight mb-3">
-              <Link href={`/noticias/${news.slug}`}>{news.title}</Link>
-            </h3>
+            <Link href={`/noticias/${news.slug}`} className="block group-hover:text-blue-900 transition-colors">
+              <h3 className="text-xl sm:text-2xl font-black text-[#00246C] leading-tight tracking-tight">
+                {news.title}
+              </h3>
+            </Link>
 
-            <p className="text-slate-600 text-sm leading-relaxed line-clamp-4 mb-4">
+            <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
               {news.summary}
             </p>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-xs text-slate-500 flex items-center gap-1">
+          <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-xs text-slate-400 flex items-center gap-1">
               <User className="w-3.5 h-3.5 text-slate-400" />
-              {news.author}
+              {news.author || 'Prensa Distrito 4320'}
             </span>
-
             <Link
               href={`/noticias/${news.slug}`}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00246C] hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3.5 py-2 rounded-lg transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00246C] bg-blue-50 hover:bg-blue-100 px-3.5 py-2 rounded-xl transition-colors"
             >
               <span>Leer Noticia Completa</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#F7A81B]" />
             </Link>
           </div>
         </div>
-
-      </article>
+      </div>
     );
   }
 
   return (
-    <article className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full">
-      
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all flex flex-col justify-between group">
       <div>
-        {/* Thumbnail */}
-        <div className="relative aspect-[16/10] w-full bg-slate-100 overflow-hidden">
+        {/* Foto Clickeable */}
+        <Link
+          href={`/noticias/${news.slug}`}
+          className="relative aspect-video w-full bg-slate-900 overflow-hidden block cursor-pointer"
+        >
           <Image
             src={news.imageUrl}
             alt={news.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            referrerPolicy="no-referrer"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <div className="absolute top-3 left-3">
-            <span
-              className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider border shadow-sm ${getCategoryColor(
-                news.category
-              )}`}
-            >
-              {news.category}
-            </span>
-          </div>
-        </div>
+          <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[#00246C] text-white text-[10px] font-black uppercase tracking-wider shadow z-10">
+            {news.category || 'Noticias'}
+          </span>
+        </Link>
 
-        {/* Body */}
-        <div className="p-5">
-          <div className="flex items-center gap-2 text-[11px] text-slate-500 mb-2.5 flex-wrap">
-            <span className="font-semibold text-[#00246C] truncate max-w-[170px] flex items-center gap-1">
+        {/* Detalle */}
+        <div className="p-5 space-y-2.5">
+          <div className="flex items-center justify-between text-[11px] text-slate-500">
+            <span className="flex items-center gap-1 font-bold text-[#00246C] truncate max-w-[180px]">
               <Building2 className="w-3 h-3 text-[#F7A81B] flex-shrink-0" />
-              {news.clubName}
+              <span className="truncate">{news.clubName}</span>
             </span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 flex-shrink-0">
               <Calendar className="w-3 h-3 text-slate-400" />
-              {formattedDate}
+              {news.date}
             </span>
           </div>
 
-          <h3 className="text-base font-bold text-slate-900 group-hover:text-[#00246C] transition-colors leading-snug line-clamp-2 mb-2">
-            <Link href={`/noticias/${news.slug}`}>{news.title}</Link>
-          </h3>
+          <Link href={`/noticias/${news.slug}`} className="block">
+            <h3 className="text-base font-extrabold text-[#00246C] group-hover:text-blue-800 transition-colors line-clamp-2 leading-snug">
+              {news.title}
+            </h3>
+          </Link>
 
-          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+          <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
             {news.summary}
           </p>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-slate-100 text-xs">
-        <span className="text-[11px] text-slate-500 truncate max-w-[130px]">
-          {news.author}
+      <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
+        <span className="text-slate-400 text-[11px] truncate">
+          {news.author || 'Prensa Distrito 4320'}
         </span>
         <Link
           href={`/noticias/${news.slug}`}
-          className="font-bold text-[#00246C] hover:text-blue-800 text-xs inline-flex items-center gap-1 hover:underline"
+          className="font-extrabold text-[#00246C] hover:text-blue-900 inline-flex items-center gap-1 group-hover:underline"
         >
           <span>Leer más</span>
-          <ArrowRight className="w-3 h-3" />
+          <ArrowRight className="w-3.5 h-3.5 text-[#F7A81B]" />
         </Link>
       </div>
-
-    </article>
+    </div>
   );
 }
