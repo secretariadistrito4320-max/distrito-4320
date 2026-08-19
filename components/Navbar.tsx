@@ -160,7 +160,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-3 group py-2 flex-shrink-0">
             <div className="relative w-48 h-12 sm:w-56 sm:h-14">
               <Image
-                src="/logo-rotary.jpg"
+                src="/logo-rotary.png"
                 alt="Rotary Distrito 4320"
                 fill
                 priority
