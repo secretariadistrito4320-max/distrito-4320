@@ -30,17 +30,27 @@ export default function NewsCard({ news, featured = false }: NewsCardProps) {
   if (featured) {
     return (
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all grid grid-cols-1 lg:grid-cols-12 group">
-        {/* Foto de Portada Clickeable */}
+        
+        {/* Foto de Portada Destacada Centrada con Fondo Difuminado */}
         <Link
           href={`/noticias/${news.slug}`}
-          className="lg:col-span-7 relative aspect-video lg:aspect-auto w-full h-full min-h-[260px] bg-slate-900 overflow-hidden block cursor-pointer"
+          className="lg:col-span-7 relative aspect-video lg:aspect-auto w-full h-full min-h-[280px] bg-slate-950 overflow-hidden block cursor-pointer group/img"
         >
+          {/* Fondo Ambiental Difuminado */}
+          <Image
+            src={news.imageUrl}
+            alt=""
+            fill
+            sizes="10vw"
+            className="object-cover blur-2xl opacity-35 scale-125 pointer-events-none"
+          />
+          {/* Foto Principal Completa y Centrada */}
           <Image
             src={news.imageUrl}
             alt={news.title}
             fill
             sizes="(max-width: 1024px) 100vw, 58vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-contain p-2 group-hover/img:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
             <span className="px-3 py-1 rounded-full bg-[#00246C] text-[#F7A81B] text-[10px] font-black uppercase tracking-wider shadow">
@@ -52,7 +62,7 @@ export default function NewsCard({ news, featured = false }: NewsCardProps) {
           </div>
         </Link>
 
-        {/* Detalle */}
+        {/* Detalle de la Noticia */}
         <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
@@ -99,17 +109,27 @@ export default function NewsCard({ news, featured = false }: NewsCardProps) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all flex flex-col justify-between group">
       <div>
-        {/* Foto Clickeable */}
+        
+        {/* Foto de Portada Estándar Centrada con Fondo Difuminado */}
         <Link
           href={`/noticias/${news.slug}`}
-          className="relative aspect-video w-full bg-slate-900 overflow-hidden block cursor-pointer"
+          className="relative aspect-video w-full bg-slate-950 overflow-hidden block cursor-pointer group/img"
         >
+          {/* Fondo Ambiental Difuminado */}
+          <Image
+            src={news.imageUrl}
+            alt=""
+            fill
+            sizes="10vw"
+            className="object-cover blur-2xl opacity-35 scale-125 pointer-events-none"
+          />
+          {/* Foto Principal Completa y Centrada */}
           <Image
             src={news.imageUrl}
             alt={news.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-contain p-1.5 group-hover/img:scale-105 transition-transform duration-500"
           />
           <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-[#00246C] text-white text-[10px] font-black uppercase tracking-wider shadow z-10">
             {news.category || 'Noticias'}
