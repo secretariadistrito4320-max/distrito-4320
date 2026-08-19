@@ -6,26 +6,24 @@ import {
   ArrowRight,
   ShieldCheck,
   Building2,
-  Calendar,
   CreditCard,
-  Heart,
   ChevronRight,
   MapPin,
-  ExternalLink,
   Users
 } from 'lucide-react';
 import FeaturedVideosSection from '@/components/FeaturedVideosSection';
 import NewsSection from '@/components/NewsSection';
 import RotaryAreasSection from '@/components/RotaryAreasSection';
-import rawMockData from '@/data/mockData.json';
 import { CLUBS_DATA } from '@/data/clubsData';
 import { GOVERNORS_DATA } from '@/data/governorsData';
-import { NewsItem } from '@/components/NewsCard';
+import { getNews } from '@/lib/getNews';
 
-const mockNews: NewsItem[] = rawMockData as NewsItem[];
 const currentGovernor = GOVERNORS_DATA[0]; // Carlos Tapia Gómez 2026-2027
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Consumo dinámico de noticias desde Google Sheets (con fallback a mockData)
+  const news = await getNews();
+
   return (
     <div className="w-full flex flex-col">
       
@@ -167,11 +165,11 @@ export default function HomePage() {
 
       </section>
 
-      {/* 2. FEATURED VIDEOS MODULE (Grid 3 columnas con reproductor modal) */}
+      {/* 2. FEATURED VIDEOS MODULE */}
       <FeaturedVideosSection />
 
-      {/* 3. NEWS & UPDATES SECTION (Interactive Search, Filters & Grid) */}
-      <NewsSection initialNews={mockNews} />
+      {/* 3. NEWS & UPDATES SECTION (Noticias dinámicas) */}
+      <NewsSection initialNews={news} />
 
       {/* 4. DISTRICT MANIFESTO & 7 AREAS OF FOCUS */}
       <RotaryAreasSection />
