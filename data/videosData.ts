@@ -1,43 +1,43 @@
 export interface RotaryVideo {
   id: string;
+  youtubeId: string;
   title: string;
   subtitle: string;
-  youtubeId: string;
-  duration: string;
-  thumbnail: string;
-  category: string;
   description: string;
+  duration: string;
+  category: string;
+  thumbnail: string;
 }
 
 export const FEATURED_VIDEOS: RotaryVideo[] = [
   {
-    id: "video-1",
-    title: "Pongamos fin a la Polio (End Polio Now)",
-    subtitle: "El histórico compromiso de Rotary por un mundo libre de poliomielitis",
-    youtubeId: "mD0V7L5eQjQ",
-    duration: "3:45 min",
-    thumbnail: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800&auto=format&fit=crop",
-    category: "PolioPlus",
-    description: "Conoce cómo Rotary International y sus aliados han vacunado a más de 3.000 millones de niños en todo el mundo, reduciendo los casos de polio en un 99.9%."
+    id: 'v1',
+    youtubeId: 'B2KO_VE9Slo', // Eradicating Polio, Forever (Rotary International)
+    title: 'Pongamos fin a la Polio (End Polio Now)',
+    subtitle: 'El histórico compromiso de Rotary por un mundo libre de poliomielitis',
+    description: 'Conoce cómo Rotary International y sus aliados han vacunado a más de 3.000 millones de niños en todo el mundo, reduciendo los casos de polio en un 99.9%. Un esfuerzo histórico que no se detendrá hasta lograr la erradicación total.',
+    duration: '4:35 min',
+    category: 'POLIOPLUS',
+    thumbnail: 'https://img.youtube.com/vi/B2KO_VE9Slo/maxresdefault.jpg'
   },
   {
-    id: "video-2",
-    title: "Erradiquemos la Polio: El Último Tramo",
-    subtitle: "Cada gota cuenta en la misión más grande de la historia de la salud pública",
-    youtubeId: "0rE2H2WvKzM",
-    duration: "4:12 min",
-    thumbnail: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?q=80&w=800&auto=format&fit=crop",
-    category: "Salud Global",
-    description: "Trabajadores de salud y rotarios superan barreras geográficas y climáticas extremas para llevar vacunas a los rincones más inaccesibles del planeta."
+    id: 'v2',
+    youtubeId: 'NAYTax_9BOk', // 98ª Conferencia Distrito 4320
+    title: 'Gente de Acción: Distrito 4320 en terreno',
+    subtitle: 'Líderes que transforman ideas en impacto tangible para Chile',
+    description: 'Resumen de la Conferencia Distrital. Desde Arica hasta Valparaíso y Rapa Nui, descubre las historias humanas de servicio, amistad y liderazgo que definen el espíritu rotario chileno en cada uno de nuestros clubes.',
+    duration: '1:13 min',
+    category: 'DISTRITO 4320',
+    thumbnail: 'https://img.youtube.com/vi/NAYTax_9BOk/maxresdefault.jpg'
   },
   {
-    id: "video-3",
-    title: "Gente de Acción: Distrito 4320 en Movimiento",
-    subtitle: "Líderes que transforman ideas en impacto tangible para Chile",
-    youtubeId: "gT8vWzQ2bL0",
-    duration: "2:58 min",
-    thumbnail: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=800&auto=format&fit=crop",
-    category: "Distrito 4320",
-    description: "Desde Arica hasta Valparaíso y Rapa Nui, descubre las historias humanas de servicio, amistad y liderazgo que definen el espíritu rotario chileno."
+    id: 'v3',
+    youtubeId: '7u_tcu1bIBg', // Promoción Centenario Rotary Chile
+    title: 'Centenario del Rotarismo en Chile',
+    subtitle: 'Cien años forjando líderes y cambiando comunidades',
+    description: 'En 1923 se fundó el primer Club Rotario en Valparaíso, marcando el inicio de una era de servicio desinteresado en nuestro país. Revive en este recorrido histórico cómo Rotary se ha consolidado a lo largo del territorio nacional.',
+    duration: '5:01 min',
+    category: 'HISTORIA',
+    thumbnail: 'https://img.youtube.com/vi/7u_tcu1bIBg/maxresdefault.jpg'
   }
 ];
