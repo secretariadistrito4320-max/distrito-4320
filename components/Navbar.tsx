@@ -64,7 +64,7 @@ export default function Navbar() {
   ) => {
     timerRef.current = setTimeout(() => {
       setter(false);
-    }, 200); // 200 milisegundos de tolerancia antes de cerrar
+    }, 200);
   };
 
   // Cerrar dropdowns al hacer clic fuera
@@ -137,7 +137,7 @@ export default function Navbar() {
               Quiénes Somos
             </Link>
 
-            {/* SOBRE ROTARY ▾ */}
+            {/* 1. SOBRE ROTARY ▾ */}
             <div
               className="relative"
               ref={sobreRotaryRef}
@@ -166,11 +166,11 @@ export default function Navbar() {
                     </Link>
                     <div className="border-t border-slate-100 my-1" />
                     <a href="https://www.rotary.org/es-mx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-blue-50 text-blue-900 font-bold transition-colors">
-                      <span className="flex items-center gap-2"><Globe className="w-3.5 h-3.5 text-[#00246C]" /> Link d Rotary</span>
+                      <span className="flex items-center gap-2"><Globe className="w-3.5 h-3.5 text-[#00246C]" /> Rotary.org (Oficial)</span>
                       <ExternalLink className="w-3 h-3 text-slate-400" />
                     </a>
                     <a href="https://my.rotary.org/es" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-blue-50 text-blue-900 font-bold transition-colors">
-                      <span className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-[#00246C]" /> Link My Rotary</span>
+                      <span className="flex items-center gap-2"><ShieldCheck className="w-3.5 h-3.5 text-[#00246C]" /> My Rotary (Portal)</span>
                       <ExternalLink className="w-3 h-3 text-slate-400" />
                     </a>
                   </div>
@@ -178,7 +178,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* EL DISTRITO ▾ */}
+            {/* 2. EL DISTRITO ▾ */}
             <div
               className="relative"
               ref={distritoRef}
@@ -192,7 +192,7 @@ export default function Navbar() {
               >
                 <Building2 className="w-4 h-4 text-[#F7A81B]" />
                 <span>EL DISTRITO</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${distritoOpen ? 'rotate-180 text-[#F7A81B]' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${distritoOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {distritoOpen && (
@@ -244,7 +244,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* CARTAS GD ▾ */}
+            {/* 3. CARTAS GD ▾ */}
             <div
               className="relative"
               ref={cartasRef}
@@ -274,7 +274,7 @@ export default function Navbar() {
                     <div className="p-3 grid grid-cols-3 gap-2 bg-slate-50">
                       {GOVERNORS_DATA.map((gov) => (
                         <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 transition-all text-center group">
-                          <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800">{gov.shortName}</span>
+                          <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800">GD {gov.shortName}</span>
                           <span className="block text-[10px] text-slate-500 font-medium">{gov.period}</span>
                         </Link>
                       ))}
@@ -284,7 +284,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* CARTELERA ▾ */}
+            {/* 4. CARTELERA ▾ */}
             <div
               className="relative"
               ref={carteleraRef}
@@ -340,8 +340,8 @@ export default function Navbar() {
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B] block px-1 pb-1 border-b border-blue-900">Sobre Rotary</span>
             <Link href="/#objetivos-valores" className="block px-2 py-1.5 text-white hover:bg-blue-900 rounded">• Objetivos y valores</Link>
             <Link href="/#prueba-cuadruple" className="block px-2 py-1.5 text-white hover:bg-blue-900 rounded">• Prueba cuádruple</Link>
-            <a href="https://www.rotary.org/es-mx" target="_blank" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">• Link d Rotary (Oficial) ↗</a>
-            <a href="https://my.rotary.org/es" target="_blank" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">• Link My Rotary ↗</a>
+            <a href="https://www.rotary.org/es-mx" target="_blank" rel="noopener noreferrer" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">• Rotary.org (Oficial) ↗</a>
+            <a href="https://my.rotary.org/es" target="_blank" rel="noopener noreferrer" className="block px-2 py-1.5 text-blue-200 hover:text-[#F7A81B] rounded">• My Rotary (Portal) ↗</a>
           </div>
 
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
@@ -361,7 +361,7 @@ export default function Navbar() {
             </div>
             <div className="grid grid-cols-2 gap-1 pt-1">
               {GOVERNORS_DATA.slice(0, 6).map((gov) => (
-                <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="px-2 py-1 text-[11px] text-slate-200 hover:text-[#F7A81B] rounded truncate">{gov.shortName}</Link>
+                <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="px-2 py-1 text-[11px] text-slate-200 hover:text-[#F7A81B] rounded truncate">GD {gov.shortName}</Link>
               ))}
             </div>
           </div>
