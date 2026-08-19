@@ -13,20 +13,28 @@ import {
 import FeaturedVideosSection from '@/components/FeaturedVideosSection';
 import NewsSection from '@/components/NewsSection';
 import RotaryAreasSection from '@/components/RotaryAreasSection';
+import TopAlertBanner from '@/components/TopAlertBanner';
 import { CLUBS_DATA } from '@/data/clubsData';
 import { GOVERNORS_DATA } from '@/data/governorsData';
 import { getNews } from '@/lib/getNews';
+import { getActiveAlert } from '@/lib/getAlert';
 
 export const revalidate = 60;
 
 const currentGovernor = GOVERNORS_DATA[0]; // Carlos Tapia Gómez 2026-2027
 
 export default async function HomePage() {
-  const news = await getNews();
+  const [news, alert] = await Promise.all([
+    getNews(),
+    getActiveAlert()
+  ]);
 
   return (
     <div className="w-full flex flex-col">
       
+      {/* 0. CINTILLO / BANNER DE ALERTA DINÁMICO */}
+      <TopAlertBanner initialAlert={alert} />
+
       {/* 1. HERO BANNER SECTION */}
       <section className="relative w-full bg-gradient-to-r from-[#001744] via-[#00246C] to-slate-900 text-white overflow-hidden py-14 sm:py-20 lg:py-24 border-b-4 border-[#F7A81B]">
         
@@ -56,7 +64,7 @@ export default async function HomePage() {
                 Bienvenidos al portal oficial del <strong className="text-white font-bold">Rotary Club Distrito 4320 (Chile)</strong>. Conectamos a más de 70 clubes desde Arica hasta Valparaíso y Rapa Nui, impulsando proyectos de salud, agua potable, educación y desarrollo comunitario.
               </p>
 
-              {/* Action Buttons (Solo los 2 botones principales) */}
+              {/* Action Buttons */}
               <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <Link
                   href="#noticias-section"
