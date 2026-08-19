@@ -6,7 +6,6 @@ import {
   ArrowRight,
   ShieldCheck,
   Building2,
-  CreditCard,
   ChevronRight,
   MapPin,
   Users
@@ -23,7 +22,6 @@ export const revalidate = 60;
 const currentGovernor = GOVERNORS_DATA[0]; // Carlos Tapia Gómez 2026-2027
 
 export default async function HomePage() {
-  // Consumo dinámico de noticias desde Google Sheets (con fallback a mockData)
   const news = await getNews();
 
   return (
@@ -32,7 +30,6 @@ export default async function HomePage() {
       {/* 1. HERO BANNER SECTION */}
       <section className="relative w-full bg-gradient-to-r from-[#001744] via-[#00246C] to-slate-900 text-white overflow-hidden py-14 sm:py-20 lg:py-24 border-b-4 border-[#F7A81B]">
         
-        {/* Background Subtle Geometric Pattern & Glow */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#F7A81B_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#F7A81B]/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -59,11 +56,10 @@ export default async function HomePage() {
                 Bienvenidos al portal oficial del <strong className="text-white font-bold">Rotary Club Distrito 4320 (Chile)</strong>. Conectamos a más de 70 clubes desde Arica hasta Valparaíso y Rapa Nui, impulsando proyectos de salud, agua potable, educación y desarrollo comunitario.
               </p>
 
-              {/* Action Buttons */}
+              {/* Action Buttons (Solo los 2 botones principales) */}
               <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <Link
                   href="#noticias-section"
-                  id="hero-btn-noticias"
                   className="px-5 py-3 rounded-xl bg-[#F7A81B] hover:bg-amber-400 text-[#00246C] font-black text-xs sm:text-sm transition-all shadow-lg active:scale-95 inline-flex items-center gap-2"
                 >
                   <span>Explorar Noticias y Actividades</span>
@@ -72,20 +68,10 @@ export default async function HomePage() {
 
                 <Link
                   href="/clubes"
-                  id="hero-btn-clubes"
                   className="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs sm:text-sm transition-all backdrop-blur-sm inline-flex items-center gap-2"
                 >
                   <Building2 className="w-4 h-4 text-[#F7A81B]" />
                   <span>Directorio de Clubes</span>
-                </Link>
-
-                <Link
-                  href="/pagos-2026-2027"
-                  id="hero-btn-transparencia"
-                  className="px-4 py-3 rounded-xl bg-blue-950/80 hover:bg-blue-900 border border-blue-800 text-xs sm:text-sm font-semibold text-blue-200 hover:text-white transition-all inline-flex items-center gap-1.5"
-                >
-                  <CreditCard className="w-4 h-4 text-emerald-400" />
-                  <span>Transparencia y Pagos</span>
                 </Link>
               </div>
 
@@ -109,7 +95,7 @@ export default async function HomePage() {
 
             </div>
 
-            {/* Right Card: Gobernador Distrital Vigente Card */}
+            {/* Right Card: Gobernador Distrital Vigente */}
             <div className="lg:col-span-5">
               <div className="bg-white rounded-3xl p-6 text-slate-900 shadow-2xl border border-slate-100 relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-[#F7A81B] text-[#00246C] font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-bl-xl">
@@ -174,7 +160,7 @@ export default async function HomePage() {
       {/* 2. FEATURED VIDEOS MODULE */}
       <FeaturedVideosSection />
 
-      {/* 3. NEWS & UPDATES SECTION (Noticias dinámicas) */}
+      {/* 3. NEWS & UPDATES SECTION */}
       <NewsSection initialNews={news} />
 
       {/* 4. DISTRICT MANIFESTO & 7 AREAS OF FOCUS */}
@@ -189,7 +175,7 @@ export default async function HomePage() {
                 Clubes Rotarios del Distrito 4320
               </h3>
               <p className="text-xs text-slate-500">
-                Encuentra tu club más cercano, días de reunión y actividades comunitarias.
+                Encuentra tu club más cercano y sus actividades comunitarias.
               </p>
             </div>
             <Link
