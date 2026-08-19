@@ -50,12 +50,10 @@ export async function generateMetadata({ params }: PageProps) {
 function formatArticleContent(rawContent: string): string {
   if (!rawContent) return '';
 
-  // 1. Si el contenido ya posee estructura HTML de etiquetas
   if (/<(p|div|h[1-6]|blockquote|section)/i.test(rawContent)) {
     return rawContent;
   }
 
-  // 2. Normalizar y separar lemas o títulos en mayúsculas
   let normalized = rawContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
 
   normalized = normalized.replace(
@@ -74,7 +72,6 @@ function formatArticleContent(rawContent: string): string {
       .join('');
   }
 
-  // 3. Fallback: Si viene en un único bloque sin saltos de línea, dividir por oraciones largas
   const sentences = normalized.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑ])/);
   if (sentences.length > 2) {
     let chunks: string[] = [];
@@ -170,16 +167,24 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
           </div>
 
-          {/* Imagen Principal de Portada */}
+          {/* Imagen Principal de Portada Sin Recortar (100% visible) */}
           {news.imageUrl && (
-            <div className="relative w-full aspect-video bg-slate-900 overflow-hidden">
+            <div className="relative w-full h-[360px] sm:h-[480px] lg:h-[540px] bg-slate-950 overflow-hidden border-b border-slate-100">
+              {/* Fondo Ambiental Difuminado */}
+              <Image
+                src={news.imageUrl}
+                alt=""
+                fill
+                className="object-cover blur-2xl opacity-25 scale-125 pointer-events-none"
+              />
+              {/* Imagen Principal Completa */}
               <Image
                 src={news.imageUrl}
                 alt={news.title}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 896px"
-                className="object-cover"
+                className="object-contain p-2 sm:p-4"
               />
             </div>
           )}
@@ -208,14 +213,21 @@ export default async function NewsDetailPage({ params }: PageProps) {
                   {galleryImages.map((imgUrl, idx) => (
                     <div
                       key={idx}
-                      className="relative aspect-video rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100 group"
+                      className="relative aspect-video rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-slate-950 group"
                     >
+                      <Image
+                        src={imgUrl}
+                        alt=""
+                        fill
+                        sizes="10vw"
+                        className="object-cover blur-xl opacity-30 scale-125 pointer-events-none"
+                      />
                       <Image
                         src={imgUrl}
                         alt={`${news.title} - Imagen ${idx + 1}`}
                         fill
                         sizes="(max-width: 640px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   ))}
@@ -242,13 +254,20 @@ export default async function NewsDetailPage({ params }: PageProps) {
                   className="bg-white rounded-2xl p-4 border border-slate-200 hover:border-[#00246C] hover:shadow-md transition-all group flex flex-col justify-between"
                 >
                   <div className="space-y-2">
-                    <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-slate-100">
+                    <div className="relative aspect-video w-full rounded-xl overflow-hidden bg-slate-950">
+                      <Image
+                        src={item.imageUrl}
+                        alt=""
+                        fill
+                        sizes="10vw"
+                        className="object-cover blur-lg opacity-30 pointer-events-none"
+                      />
                       <Image
                         src={item.imageUrl}
                         alt={item.title}
                         fill
                         sizes="280px"
-                        className="object-cover group-hover:scale-105 transition-transform"
+                        className="object-contain p-1 group-hover:scale-105 transition-transform"
                       />
                     </div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#F7A81B] block pt-1">
