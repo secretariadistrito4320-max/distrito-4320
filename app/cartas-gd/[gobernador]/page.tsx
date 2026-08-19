@@ -1,23 +1,14 @@
-'use client';
-
-import React, { use } from 'react';
+import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Mail,
   Calendar,
   Download,
-  FileText,
-  Building2,
   ArrowLeft,
   ChevronRight,
-  Sparkles,
-  Share2,
-  Printer,
-  CheckCircle2
 } from 'lucide-react';
-import { GOVERNORS_DATA, Governor } from '@/data/governorsData';
+import { GOVERNORS_DATA } from '@/data/governorsData';
 
 interface GovernorPageProps {
   params: Promise<{
@@ -25,17 +16,20 @@ interface GovernorPageProps {
   }>;
 }
 
-export default function GovernorDetailPage({ params }: GovernorPageProps) {
-  const resolvedParams = use(params);
+// Función requerida por Next.js para la exportación estática en Cloudflare
+export async function generateStaticParams() {
+  return GOVERNORS_DATA.map((gov) => ({
+    gobernador: gov.slug,
+  }));
+}
+
+export default async function GovernorDetailPage({ params }: GovernorPageProps) {
+  const resolvedParams = await params;
   const gov = GOVERNORS_DATA.find((g) => g.slug === resolvedParams.gobernador);
 
   if (!gov) {
     notFound();
   }
-
-  const handleDownload = (letterTitle: string) => {
-    alert(`Descargando copia oficial en PDF de: ${letterTitle}`);
-  };
 
   return (
     <div className="w-full flex flex-col bg-[#F8FAFC]">
@@ -150,14 +144,13 @@ export default function GovernorDetailPage({ params }: GovernorPageProps) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleDownload(letter.title)}
+                  <a
+                    href="#"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
                   >
                     <Download className="w-3.5 h-3.5 text-[#00246C]" />
                     <span>Descargar PDF</span>
-                  </button>
+                  </a>
                 </div>
               </div>
 
