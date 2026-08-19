@@ -8,15 +8,9 @@ import {
   User,
   ArrowLeft,
   ChevronRight,
-  Share2,
-  Tag,
-  Clock
 } from 'lucide-react';
-import rawMockData from '@/data/mockData.json';
-import { NewsItem } from '@/components/NewsCard';
 import { CLUBS_DATA } from '@/data/clubsData';
-
-const mockNews: NewsItem[] = rawMockData as NewsItem[];
+import { getNews } from '@/lib/getNews';
 
 interface NewsDetailPageProps {
   params: Promise<{
@@ -24,16 +18,18 @@ interface NewsDetailPageProps {
   }>;
 }
 
-// Función requerida para exportación estática en Cloudflare
+// Genera los parámetros estáticos dinámicamente desde la API
 export async function generateStaticParams() {
-  return mockNews.map((news) => ({
+  const newsList = await getNews();
+  return newsList.map((news) => ({
     slug: news.slug,
   }));
 }
 
 export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
   const resolvedParams = await params;
-  const news = mockNews.find((n) => n.slug === resolvedParams.slug);
+  const newsList = await getNews();
+  const news = newsList.find((n) => n.slug === resolvedParams.slug);
 
   if (!news) {
     notFound();
