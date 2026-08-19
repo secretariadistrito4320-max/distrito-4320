@@ -163,7 +163,7 @@ export default function NewsSection({
             
             {featuredNews && (
               <div className="w-full">
-                <NewsCard news={featuredNews} isFeatured={true} />
+                <NewsCard news={featuredNews} featured={true} />
               </div>
             )}
 
