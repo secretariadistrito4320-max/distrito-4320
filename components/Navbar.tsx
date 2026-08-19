@@ -30,6 +30,7 @@ import { GOVERNORS_DATA } from '@/data/governorsData';
 export default function Navbar() {
   const pathname = usePathname();
 
+  // Estados de Menús Desplegables
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sobreRotaryOpen, setSobreRotaryOpen] = useState(false);
   const [distritoOpen, setDistritoOpen] = useState(false);
@@ -37,11 +38,36 @@ export default function Navbar() {
   const [carteleraOpen, setCarteleraOpen] = useState(false);
   const [searchClubTerm, setSearchClubTerm] = useState('');
 
+  // Refs para Click Outside
   const sobreRotaryRef = useRef<HTMLDivElement>(null);
   const distritoRef = useRef<HTMLDivElement>(null);
   const cartasRef = useRef<HTMLDivElement>(null);
   const carteleraRef = useRef<HTMLDivElement>(null);
 
+  // Timers para tiempo de gracia al quitar el mouse (200ms)
+  const sobreRotaryTimer = useRef<NodeJS.Timeout | null>(null);
+  const distritoTimer = useRef<NodeJS.Timeout | null>(null);
+  const cartasTimer = useRef<NodeJS.Timeout | null>(null);
+  const carteleraTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+    timerRef: React.MutableRefObject<NodeJS.Timeout | null>
+  ) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setter(true);
+  };
+
+  const handleMouseLeave = (
+    setter: React.Dispatch<React.SetStateAction<boolean>>,
+    timerRef: React.MutableRefObject<NodeJS.Timeout | null>
+  ) => {
+    timerRef.current = setTimeout(() => {
+      setter(false);
+    }, 200); // 200 milisegundos de tolerancia antes de cerrar
+  };
+
+  // Cerrar dropdowns al hacer clic fuera
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (sobreRotaryRef.current && !sobreRotaryRef.current.contains(event.target as Node)) {
@@ -90,7 +116,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* LOGO (Ruta corregida apuntando a /images/logo-rotary_2.png) */}
+          {/* LOGO OFICIAL */}
           <Link href="/" className="flex items-center py-2 flex-shrink-0 h-full">
             <div className="relative w-44 h-12 sm:w-60 sm:h-14 lg:w-72 lg:h-16">
               <Image
@@ -104,7 +130,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* MENÚ DESKTOP */}
+          {/* MENÚ DE NAVEGACIÓN DESKTOP */}
           <div className="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-xs xl:text-sm font-bold tracking-wide">
             
             <Link href="/#quienes-somos" className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all">
@@ -112,15 +138,24 @@ export default function Navbar() {
             </Link>
 
             {/* SOBRE ROTARY ▾ */}
-            <div className="relative" ref={sobreRotaryRef} onMouseEnter={() => setSobreRotaryOpen(true)} onMouseLeave={() => setSobreRotaryOpen(false)}>
-              <button type="button" className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1">
+            <div
+              className="relative"
+              ref={sobreRotaryRef}
+              onMouseEnter={() => handleMouseEnter(setSobreRotaryOpen, sobreRotaryTimer)}
+              onMouseLeave={() => handleMouseLeave(setSobreRotaryOpen, sobreRotaryTimer)}
+            >
+              <button
+                type="button"
+                onClick={() => setSobreRotaryOpen(!sobreRotaryOpen)}
+                className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1 cursor-pointer"
+              >
                 <span>Sobre Rotary</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-[#F7A81B] transition-transform ${sobreRotaryOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {sobreRotaryOpen && (
-                <div className="absolute left-0 mt-1 w-64 rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-2 space-y-1 text-xs">
+                <div className="absolute left-0 top-full pt-1.5 w-64 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden p-2 space-y-1 text-xs">
                     <Link href="/#objetivos-valores" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-[#00246C] font-semibold transition-colors">
                       <Info className="w-3.5 h-3.5 text-[#00246C]" />
                       <span>Objetivos y Valores</span>
@@ -144,100 +179,131 @@ export default function Navbar() {
             </div>
 
             {/* EL DISTRITO ▾ */}
-            <div className="relative" ref={distritoRef} onMouseEnter={() => setDistritoOpen(true)} onMouseLeave={() => setDistritoOpen(false)}>
-              <button type="button" className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 ${isClubesActive || isEgdActive || isPagosActive || isTransparenciaActive ? 'bg-blue-900 text-[#F7A81B] font-bold' : 'hover:bg-[#001d57] hover:text-[#F7A81B]'}`}>
+            <div
+              className="relative"
+              ref={distritoRef}
+              onMouseEnter={() => handleMouseEnter(setDistritoOpen, distritoTimer)}
+              onMouseLeave={() => handleMouseLeave(setDistritoOpen, distritoTimer)}
+            >
+              <button
+                type="button"
+                onClick={() => setDistritoOpen(!distritoOpen)}
+                className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 cursor-pointer ${isClubesActive || isEgdActive || isPagosActive || isTransparenciaActive ? 'bg-blue-900 text-[#F7A81B] font-bold' : 'hover:bg-[#001d57] hover:text-[#F7A81B]'}`}
+              >
                 <Building2 className="w-4 h-4 text-[#F7A81B]" />
                 <span>EL DISTRITO</span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${distritoOpen ? 'rotate-180 text-[#F7A81B]' : ''}`} />
               </button>
 
               {distritoOpen && (
-                <div className="absolute left-0 mt-1 w-[540px] rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-3 bg-slate-50 border-b border-slate-200 grid grid-cols-3 gap-2 text-xs">
-                    <Link href="/clubes" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
-                      <Users className="w-3.5 h-3.5 text-[#00246C]" /> Clubes Rotarios
-                    </Link>
-                    <Link href="/#interact" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
-                      <Sparkles className="w-3.5 h-3.5 text-[#F7A81B]" /> Interact
-                    </Link>
-                    <Link href="/#rotaract" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
-                      <Users className="w-3.5 h-3.5 text-blue-600" /> Rotaract
-                    </Link>
-                  </div>
-                  <div className="p-3.5">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">Directorio de Clubes D4320</span>
-                      <span className="text-[11px] text-[#00246C] font-semibold">{CLUBS_DATA.length} Clubes</span>
+                <div className="absolute left-0 top-full pt-1.5 w-[540px] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden">
+                    <div className="p-3 bg-slate-50 border-b border-slate-200 grid grid-cols-3 gap-2 text-xs">
+                      <Link href="/clubes" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
+                        <Users className="w-3.5 h-3.5 text-[#00246C]" /> Clubes Rotarios
+                      </Link>
+                      <Link href="/#interact" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
+                        <Sparkles className="w-3.5 h-3.5 text-[#F7A81B]" /> Interact
+                      </Link>
+                      <Link href="/#rotaract" className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 font-bold text-[#00246C] flex items-center gap-1.5 transition-colors">
+                        <Users className="w-3.5 h-3.5 text-blue-600" /> Rotaract
+                      </Link>
                     </div>
-                    <div className="relative mb-2.5">
-                      <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="Buscar club o ciudad..."
-                        value={searchClubTerm}
-                        onChange={(e) => setSearchClubTerm(e.target.value)}
-                        className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-[#00246C] text-slate-800"
-                        onClick={(e) => e.stopPropagation()}
-                      />
+                    <div className="p-3.5">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[11px] font-bold tracking-wider text-slate-500 uppercase">Directorio de Clubes D4320</span>
+                        <span className="text-[11px] text-[#00246C] font-semibold">{CLUBS_DATA.length} Clubes</span>
+                      </div>
+                      <div className="relative mb-2.5">
+                        <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
+                        <input
+                          type="text"
+                          placeholder="Buscar club o ciudad..."
+                          value={searchClubTerm}
+                          onChange={(e) => setSearchClubTerm(e.target.value)}
+                          className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-100 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-[#00246C] text-slate-800"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      <div className="max-h-48 overflow-y-auto pr-1 grid grid-cols-2 gap-1 custom-scrollbar">
+                        {filteredClubs.map((club) => (
+                          <Link key={club.id} href={`/clubes/${club.slug}`} className="px-2.5 py-1.5 rounded text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-[#00246C] flex items-center justify-between transition-colors group">
+                            <span className="truncate">{club.name}</span>
+                            <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 text-[#00246C] flex-shrink-0 transition-opacity" />
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                    <div className="max-h-48 overflow-y-auto pr-1 grid grid-cols-2 gap-1 custom-scrollbar">
-                      {filteredClubs.map((club) => (
-                        <Link key={club.id} href={`/clubes/${club.slug}`} className="px-2.5 py-1.5 rounded text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-[#00246C] flex items-center justify-between transition-colors group">
-                          <span className="truncate">{club.name}</span>
-                          <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 text-[#00246C] flex-shrink-0 transition-opacity" />
-                        </Link>
-                      ))}
+                    <div className="p-3 bg-slate-100 border-t border-slate-200 grid grid-cols-3 gap-2 text-xs font-semibold">
+                      <Link href="/listado-egd-4320" className="text-[#00246C] hover:underline flex items-center gap-1"><Users className="w-3.5 h-3.5 text-[#F7A81B]" /> Listado EGD</Link>
+                      <Link href="/pagos-2026-2027" className="text-emerald-700 hover:underline flex items-center gap-1 font-bold"><CreditCard className="w-3.5 h-3.5 text-emerald-600" /> Pagos 26-27</Link>
+                      <Link href="/transparencia-y-actas" className="text-[#00246C] hover:underline flex items-center gap-1"><FileText className="w-3.5 h-3.5 text-[#00246C]" /> Transparencia</Link>
                     </div>
-                  </div>
-                  <div className="p-3 bg-slate-100 border-t border-slate-200 grid grid-cols-3 gap-2 text-xs font-semibold">
-                    <Link href="/listado-egd-4320" className="text-[#00246C] hover:underline flex items-center gap-1"><Users className="w-3.5 h-3.5 text-[#F7A81B]" /> Listado EGD</Link>
-                    <Link href="/pagos-2026-2027" className="text-emerald-700 hover:underline flex items-center gap-1 font-bold"><CreditCard className="w-3.5 h-3.5 text-emerald-600" /> Pagos 26-27</Link>
-                    <Link href="/transparencia-y-actas" className="text-[#00246C] hover:underline flex items-center gap-1"><FileText className="w-3.5 h-3.5 text-[#00246C]" /> Transparencia</Link>
                   </div>
                 </div>
               )}
             </div>
 
             {/* CARTAS GD ▾ */}
-            <div className="relative" ref={cartasRef} onMouseEnter={() => setCartasOpen(true)} onMouseLeave={() => setCartasOpen(false)}>
-              <button type="button" className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 ${isCartasActive ? 'bg-blue-900 text-[#F7A81B] font-bold' : 'hover:bg-[#001d57] hover:text-[#F7A81B]'}`}>
+            <div
+              className="relative"
+              ref={cartasRef}
+              onMouseEnter={() => handleMouseEnter(setCartasOpen, cartasTimer)}
+              onMouseLeave={() => handleMouseLeave(setCartasOpen, cartasTimer)}
+            >
+              <button
+                type="button"
+                onClick={() => setCartasOpen(!cartasOpen)}
+                className={`px-2.5 py-2 rounded-md transition-all flex items-center gap-1 cursor-pointer ${isCartasActive ? 'bg-blue-900 text-[#F7A81B] font-bold' : 'hover:bg-[#001d57] hover:text-[#F7A81B]'}`}
+              >
                 <Mail className="w-4 h-4 text-[#F7A81B]" />
                 <span>Cartas GD</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${cartasOpen ? 'rotate-180 text-[#F7A81B]' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${cartasOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {cartasOpen && (
-                <div className="absolute left-0 mt-1 w-[460px] rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-3 bg-[#00246C] text-white flex items-center justify-between">
-                    <div>
-                      <h4 className="font-bold text-sm text-[#F7A81B]">Cartas Mensuales de Gobernadores</h4>
-                      <p className="text-[11px] text-blue-200">Mensajes oficiales de liderazgo distrital</p>
+                <div className="absolute left-0 top-full pt-1.5 w-[460px] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden">
+                    <div className="p-3 bg-[#00246C] text-white flex items-center justify-between">
+                      <div>
+                        <h4 className="font-bold text-sm text-[#F7A81B]">Cartas Mensuales de Gobernadores</h4>
+                        <p className="text-[11px] text-blue-200">Mensajes oficiales de liderazgo distrital</p>
+                      </div>
+                      <Link href="/cartas-gd" className="px-2 py-1 rounded bg-[#F7A81B] text-[#00246C] font-bold text-[11px] hover:bg-amber-400">Ver Todas</Link>
                     </div>
-                    <Link href="/cartas-gd" className="px-2 py-1 rounded bg-[#F7A81B] text-[#00246C] font-bold text-[11px] hover:bg-amber-400">Ver Todas</Link>
-                  </div>
-                  <div className="p-3 grid grid-cols-3 gap-2 bg-slate-50">
-                    {GOVERNORS_DATA.map((gov) => (
-                      <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 transition-all text-center group">
-                        <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800">{gov.shortName}</span>
-                        <span className="block text-[10px] text-slate-500 font-medium">{gov.period}</span>
-                      </Link>
-                    ))}
+                    <div className="p-3 grid grid-cols-3 gap-2 bg-slate-50">
+                      {GOVERNORS_DATA.map((gov) => (
+                        <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 transition-all text-center group">
+                          <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800">{gov.shortName}</span>
+                          <span className="block text-[10px] text-slate-500 font-medium">{gov.period}</span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
             {/* CARTELERA ▾ */}
-            <div className="relative" ref={carteleraRef} onMouseEnter={() => setCarteleraOpen(true)} onMouseLeave={() => setCarteleraOpen(false)}>
-              <button type="button" className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1">
+            <div
+              className="relative"
+              ref={carteleraRef}
+              onMouseEnter={() => handleMouseEnter(setCarteleraOpen, carteleraTimer)}
+              onMouseLeave={() => handleMouseLeave(setCarteleraOpen, carteleraTimer)}
+            >
+              <button
+                type="button"
+                onClick={() => setCarteleraOpen(!carteleraOpen)}
+                className="px-2.5 py-2 rounded-md hover:bg-[#001d57] hover:text-[#F7A81B] transition-all flex items-center gap-1 cursor-pointer"
+              >
                 <CalendarDays className="w-4 h-4 text-[#F7A81B]" />
                 <span>Cartelera</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${carteleraOpen ? 'rotate-180 text-[#F7A81B]' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${carteleraOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {carteleraOpen && (
-                <div className="absolute right-0 mt-1 w-64 rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-2 space-y-1 text-xs font-semibold">
+                <div className="absolute right-0 top-full pt-1.5 w-64 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden p-2 space-y-1 text-xs font-semibold">
                     <Link href="/#agenda-gobernador" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-[#00246C] transition-colors">
                       <Calendar className="w-3.5 h-3.5 text-[#00246C]" /> Agenda del Gobernador
                     </Link>
