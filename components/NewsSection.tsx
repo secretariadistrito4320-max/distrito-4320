@@ -1,18 +1,30 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import NewsCard, { NewsItem } from './NewsCard';
 import { Search, Filter, Newspaper, Sparkles, ChevronDown } from 'lucide-react';
 
 interface NewsSectionProps {
   initialNews: NewsItem[];
+  preselectedClubId?: string;
+  hideClubFilter?: boolean;
 }
 
-export default function NewsSection({ initialNews = [] }: NewsSectionProps) {
+export default function NewsSection({
+  initialNews = [],
+  preselectedClubId = 'Todos',
+  hideClubFilter = false
+}: NewsSectionProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const [selectedClub, setSelectedClub] = useState('Todos');
+  const [selectedClub, setSelectedClub] = useState(preselectedClubId);
   const [visibleCount, setVisibleCount] = useState(20);
+
+  useEffect(() => {
+    if (preselectedClubId) {
+      setSelectedClub(preselectedClubId);
+    }
+  }, [preselectedClubId]);
 
   const clubList = useMemo(() => {
     const clubsMap = new Map<string, string>();
@@ -86,7 +98,7 @@ export default function NewsSection({ initialNews = [] }: NewsSectionProps) {
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-8 space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             
-            <div className="md:col-span-7 relative">
+            <div className={hideClubFilter ? "md:col-span-12 relative" : "md:col-span-7 relative"}>
               <Search className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
               <input
                 type="text"
@@ -100,22 +112,24 @@ export default function NewsSection({ initialNews = [] }: NewsSectionProps) {
               />
             </div>
 
-            <div className="md:col-span-5 relative">
-              <Filter className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
-              <select
-                value={selectedClub}
-                onChange={(e) => handleFilterChange('club', e.target.value)}
-                className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] text-slate-800 appearance-none font-medium cursor-pointer"
-              >
-                <option value="Todos">Todos los Clubes del Distrito ({clubList.length})</option>
-                {clubList.map((club) => (
-                  <option key={club.id} value={club.id}>
-                    {club.name}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 absolute right-3 top-3 text-slate-400 pointer-events-none" />
-            </div>
+            {!hideClubFilter && (
+              <div className="md:col-span-5 relative">
+                <Filter className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
+                <select
+                  value={selectedClub}
+                  onChange={(e) => handleFilterChange('club', e.target.value)}
+                  className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#00246C] text-slate-800 appearance-none font-medium cursor-pointer"
+                >
+                  <option value="Todos">Todos los Clubes del Distrito ({clubList.length})</option>
+                  {clubList.map((club) => (
+                    <option key={club.id} value={club.id}>
+                      {club.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-4 h-4 absolute right-3 top-3 text-slate-400 pointer-events-none" />
+              </div>
+            )}
 
           </div>
 
