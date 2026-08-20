@@ -14,6 +14,7 @@ import FeaturedVideosSection from '@/components/FeaturedVideosSection';
 import NewsSection from '@/components/NewsSection';
 import RotaryAreasSection from '@/components/RotaryAreasSection';
 import TopAlertBanner from '@/components/TopAlertBanner';
+import FeaturedPhoto from '@/components/FeaturedPhoto';
 import { CLUBS_DATA } from '@/data/clubsData';
 import { GOVERNORS_DATA } from '@/data/governorsData';
 import { getNews } from '@/lib/getNews';
@@ -171,10 +172,13 @@ export default async function HomePage() {
       {/* 3. NEWS & UPDATES SECTION */}
       <NewsSection initialNews={news} />
 
-      {/* 4. DISTRICT MANIFESTO & 7 AREAS OF FOCUS */}
+      {/* 4. FOTO DE SERVICIO DESTACADA DEL MES / SEMANA */}
+      <FeaturedPhoto />
+
+      {/* 5. DISTRICT MANIFESTO & 7 AREAS OF FOCUS */}
       <RotaryAreasSection />
 
-      {/* 5. QUICK DISTRICT CLUBS DIRECTORY PREVIEW STRIP */}
+      {/* 6. QUICK DISTRICT CLUBS DIRECTORY PREVIEW STRIP */}
       <section className="w-full py-12 bg-slate-100 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-3">
