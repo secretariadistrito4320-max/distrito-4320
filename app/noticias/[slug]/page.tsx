@@ -50,52 +50,63 @@ export async function generateMetadata({ params }: PageProps) {
 function formatArticleContent(rawContent: string): string {
   if (!rawContent) return '';
 
-  let formatted = rawContent;
+  let formatted = rawContent.trim();
 
-  // 1. Inyectar espaciado y estilos a todas las imágenes e incrustaciones HTML
-  formatted = formatted.replace(
-    /<img /gi,
-    '<img class="my-8 sm:my-10 rounded-2xl shadow-md border border-slate-200 w-full object-cover block" '
-  );
+  // Detectar si el contenido ya contiene etiquetas HTML de estructura (WordPress)
+  const hasHtmlTags = /<(p|div|h[1-6]|blockquote|figure|section|article)/i.test(formatted);
 
-  formatted = formatted.replace(
-    /<figure/gi,
-    '<figure class="my-8 sm:my-10 w-full overflow-hidden" '
-  );
+  if (hasHtmlTags) {
+    // 1. Inyectar estilos a imágenes e incrustaciones HTML
+    formatted = formatted.replace(
+      /<img /gi,
+      '<img class="my-8 sm:my-10 rounded-2xl shadow-md border border-slate-200 w-full object-cover block" '
+    );
 
-  // 2. Formatear lemas y subtítulos en mayúsculas
-  formatted = formatted.replace(
-    /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
-    '</p><h3 class="text-base sm:text-lg font-extrabold text-[#00246C] mt-10 mb-4 pt-4 border-t border-slate-200 tracking-tight block">$1</h3><p>'
-  );
+    formatted = formatted.replace(
+      /<figure/gi,
+      '<figure class="my-8 sm:my-10 w-full overflow-hidden" '
+    );
 
-  // 3. Si el texto viene sin etiquetas HTML de párrafo, envolver por bloques
-  if (!/<(p|div|h[1-6]|blockquote|section)/i.test(formatted)) {
-    const paragraphs = formatted
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
-      .split(/\n\s*\n/)
-      .filter((p) => p.trim().length > 0);
-
-    if (paragraphs.length > 0) {
-      formatted = paragraphs
-        .map((p) => {
-          if (p.trim().startsWith('<h3') || p.trim().startsWith('<img') || p.trim().startsWith('<figure')) {
-            return p;
-          }
-          return `<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">${p.trim().replace(/\n/g, '<br/>')}</p>`;
-        })
-        .join('');
-    }
-  } else {
-    // Si ya contiene <p>, asegurar estilo de texto justificado y margen inferior
+    // 2. Inyectar estilos a párrafos existentes
     formatted = formatted.replace(
       /<p>/gi,
       '<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">'
     );
+
+    // 3. Formatear lemas y subtítulos en mayúsculas
+    formatted = formatted.replace(
+      /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
+      '</p><h3 class="text-base sm:text-lg font-black text-[#00246C] mt-8 mb-4 pt-2 tracking-tight block">$1</h3><p>'
+    );
+
+    return formatted;
   }
 
-  return formatted;
+  // Si es Texto Plano (Noticias creadas en AppSheet)
+  const blocks = formatted
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split(/\n\s*\n/)
+    .filter((p) => p.trim().length > 0);
+
+  return blocks
+    .map((block) => {
+      const trimmed = block.trim();
+
+      // Detectar subtítulo corto (menos de 60 caracteres, sin punto final ni dos puntos)
+      const isShortHeading =
+        trimmed.length > 0 &&
+        trimmed.length < 60 &&
+        !trimmed.endsWith('.') &&
+        !trimmed.endsWith(':');
+
+      if (isShortHeading) {
+        return `<h3 class="text-base sm:text-lg font-black text-[#00246C] mt-8 mb-4 pt-2 border-t border-slate-100 tracking-tight block">${trimmed}</h3>`;
+      }
+
+      return `<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">${trimmed.replace(/\n/g, '<br/>')}</p>`;
+    })
+    .join('');
 }
 
 export default async function NewsDetailPage({ params }: PageProps) {
@@ -190,7 +201,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Cuerpo del Artículo (Texto Justificado + Separación Amplia de Fotos) */}
+          {/* Cuerpo del Artículo */}
           <div className="p-6 sm:p-10">
             <div
               className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed
@@ -204,7 +215,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
               dangerouslySetInnerHTML={{ __html: formattedHtml }}
             />
 
-            {/* Galería Fotográfica Secundarias */}
+            {/* Galería Fotográfica Secundaria */}
             {galleryImages.length > 1 && (
               <div className="mt-14 pt-8 border-t border-slate-200">
                 <h3 className="text-lg font-bold text-[#00246C] mb-6 flex items-center gap-2">
