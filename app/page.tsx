@@ -10,6 +10,7 @@ import {
   MapPin,
   Users
 } from 'lucide-react';
+import CarteleraSection from '@/components/CarteleraSection';
 import FeaturedVideosSection from '@/components/FeaturedVideosSection';
 import FeaturedPhoto from '@/components/FeaturedPhoto';
 import NewsSection from '@/components/NewsSection';
@@ -165,6 +166,9 @@ export default async function HomePage() {
         </div>
 
       </section>
+
+      {/* 1.5 CARTELERA DE ACTIVIDADES DISTRITALES */}
+      <CarteleraSection />
 
       {/* 2. FEATURED VIDEOS MODULE */}
       <FeaturedVideosSection />
