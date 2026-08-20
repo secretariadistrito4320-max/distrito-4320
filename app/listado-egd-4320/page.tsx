@@ -34,6 +34,7 @@ export default function ListadoEgdPage() {
             email: item.email || '',
             status: item.status || item.obs || '',
             obs: item.obs || item.status || '',
+            photoUrl: item.photoUrl || item.imageUrl || '',
           }));
           setEgdList(parsed);
         }
@@ -106,7 +107,7 @@ export default function ListadoEgdPage() {
           />
         </div>
 
-        {/* Tabla Dinámica */}
+        {/* Tabla Dinámica con Soporte de Avatar/Foto */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -128,7 +129,20 @@ export default function ListadoEgdPage() {
                         {item.period}
                       </td>
                       <td className="py-3 px-4 sm:px-6 font-extrabold text-slate-900">
-                        {item.name}
+                        <div className="flex items-center gap-3">
+                          {item.photoUrl ? (
+                            <img
+                              src={item.photoUrl}
+                              alt={item.name}
+                              className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm shrink-0"
+                            />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-[#00246C]/10 text-[#00246C] font-black text-[10px] flex items-center justify-center shrink-0 border border-[#00246C]/20">
+                              {item.name.slice(0, 2).toUpperCase()}
+                            </div>
+                          )}
+                          <span>{item.name}</span>
+                        </div>
                       </td>
                       <td className="py-3 px-4 sm:px-6 font-medium text-slate-600 whitespace-nowrap">
                         <span className="inline-flex items-center gap-1.5">
