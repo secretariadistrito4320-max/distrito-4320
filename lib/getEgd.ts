@@ -9,6 +9,7 @@ export interface EGDItem {
   email?: string;
   status?: string;
   obs?: string;
+  photoUrl?: string;
 }
 
 export const FALLBACK_EGD_LIST: EGDItem[] = [
