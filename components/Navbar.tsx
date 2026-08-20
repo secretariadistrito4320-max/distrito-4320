@@ -262,19 +262,19 @@ export default function Navbar() {
               </button>
 
               {cartasOpen && (
-                <div className="absolute left-0 top-full pt-1.5 w-[460px] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="absolute left-0 top-full pt-1.5 w-[520px] z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden">
                     <div className="p-3 bg-[#00246C] text-white flex items-center justify-between">
                       <div>
                         <h4 className="font-bold text-sm text-[#F7A81B]">Cartas Mensuales de Gobernadores</h4>
                         <p className="text-[11px] text-blue-200">Mensajes oficiales de liderazgo distrital</p>
                       </div>
-                      <Link href="/cartas-gd" className="px-2 py-1 rounded bg-[#F7A81B] text-[#00246C] font-bold text-[11px] hover:bg-amber-400">Ver Todas</Link>
+                      <Link href="/cartas-gd" className="px-2.5 py-1 rounded-lg bg-[#F7A81B] text-[#00246C] font-black text-[11px] hover:bg-amber-400 transition-colors">Ver Todas</Link>
                     </div>
                     <div className="p-3 grid grid-cols-3 gap-2 bg-slate-50">
-                      {GOVERNORS_DATA.map((gov) => (
+                      {GOVERNORS_DATA.slice(0, 9).map((gov) => (
                         <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="p-2 rounded-lg bg-white border border-slate-200 hover:border-[#00246C] hover:bg-blue-50 transition-all text-center group">
-                          <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800">GD {gov.shortName}</span>
+                          <span className="block font-bold text-xs text-[#00246C] group-hover:text-blue-800 truncate">GD {gov.shortName}</span>
                           <span className="block text-[10px] text-slate-500 font-medium">{gov.period}</span>
                         </Link>
                       ))}
@@ -360,7 +360,7 @@ export default function Navbar() {
               <Link href="/cartas-gd" className="text-[10px] text-amber-300 underline">Ver todas</Link>
             </div>
             <div className="grid grid-cols-2 gap-1 pt-1">
-              {GOVERNORS_DATA.slice(0, 6).map((gov) => (
+              {GOVERNORS_DATA.slice(0, 9).map((gov) => (
                 <Link key={gov.id} href={`/cartas-gd/${gov.slug}`} className="px-2 py-1 text-[11px] text-slate-200 hover:text-[#F7A81B] rounded truncate">GD {gov.shortName}</Link>
               ))}
             </div>
