@@ -13,7 +13,6 @@ export interface LetterItem {
   date: string;
 }
 
-// Mapa de equivalencias entre nombres de AppSheet y slugs del sistema
 const SLUG_MAP: Record<string, string> = {
   'jose-miguel': 'jose-miguel',
   'josé miguel': 'jose-miguel',
@@ -51,7 +50,10 @@ const SLUG_MAP: Record<string, string> = {
   'sonia garay garay (2016-2017)': 'sonia',
   'humberto': 'humberto',
   'humberto beckers': 'humberto',
-  'humberto beckers argomedo (2015-2016)': 'humberto'
+  'humberto beckers argomedo (2015-2016)': 'humberto',
+  'felipe': 'felipe',
+  'felipe platero': 'felipe',
+  'felipe platero moscópulos (2014-2015)': 'felipe',
 };
 
 function normalizeSlug(input: string): string {
@@ -78,7 +80,6 @@ export async function getLettersByGovernor(governorSlug: string): Promise<Letter
 
     const targetSlug = normalizeSlug(governorSlug);
 
-    // Filtra las cartas asociando el nombre de AppSheet con el slug correspondiente
     const sheetLetters = data
       .filter((item: any) => {
         const itemSlug = normalizeSlug(item.governorSlug || '');
