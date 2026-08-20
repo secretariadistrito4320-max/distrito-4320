@@ -1,10 +1,14 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import TopBar from '@/components/TopBar'; // <- Vuelve a importar
+import TopAlert from '@/components/TopAlert'; // <- Nuevo componente de Alertas
+import TopBar from '@/components/TopBar';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-// ... (resto del código igual) ...
+export const metadata: Metadata = {
+  title: 'Rotary Distrito 4320',
+  description: 'Unidos Para Hacer El Bien y Generar un Impacto Duradero',
+};
 
 export default function RootLayout({
   children,
@@ -17,7 +21,8 @@ export default function RootLayout({
         suppressHydrationWarning
         className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 font-sans antialiased selection:bg-[#F7A81B] selection:text-[#00246C]"
       >
-        <TopBar />   {/* <- Vuelve a agregarlo aquí */}
+        <TopAlert />   {/* <- Banner condicional de Alertas administrado desde AppSheet */}
+        <TopBar />
         <Navbar />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
