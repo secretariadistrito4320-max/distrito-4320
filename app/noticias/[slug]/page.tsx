@@ -18,9 +18,13 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 60; // Regenera el caché cada minuto
+export const dynamicParams = true; // Permite construir noticias antiguas on-demand
+
+// OPTIMIZACIÓN: Solo pre-renderizar las 15 más recientes para evitar Timeout de Vercel (60s)
 export async function generateStaticParams() {
   const allNews = await getNews();
-  return allNews.map((news) => ({
+  return allNews.slice(0, 15).map((news) => ({
     slug: news.slug,
   }));
 }
@@ -205,13 +209,13 @@ export default async function NewsDetailPage({ params }: PageProps) {
           <div className="p-6 sm:p-10">
             <div
               className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed
-                         prose-headings:font-black prose-headings:text-[#00246C] prose-headings:tracking-tight prose-headings:mt-10 prose-headings:mb-4
-                         prose-p:mb-6 prose-p:leading-relaxed prose-p:text-justify prose-p:text-pretty
-                         prose-strong:text-[#00246C] prose-strong:font-bold
-                         prose-a:text-[#00246C] prose-a:font-bold prose-a:underline hover:prose-a:text-amber-600
-                         prose-img:rounded-2xl prose-img:shadow-md prose-img:my-8 prose-img:sm:my-10 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-slate-200
-                         prose-figure:my-8 prose-figure:sm:my-10
-                         [&_p>img]:my-8 [&_p>img]:sm:my-10 [&_img+img]:mt-8 [&_figure]:my-8"
+                          prose-headings:font-black prose-headings:text-[#00246C] prose-headings:tracking-tight prose-headings:mt-10 prose-headings:mb-4
+                          prose-p:mb-6 prose-p:leading-relaxed prose-p:text-justify prose-p:text-pretty
+                          prose-strong:text-[#00246C] prose-strong:font-bold
+                          prose-a:text-[#00246C] prose-a:font-bold prose-a:underline hover:prose-a:text-amber-600
+                          prose-img:rounded-2xl prose-img:shadow-md prose-img:my-8 prose-img:sm:my-10 prose-img:w-full prose-img:object-cover prose-img:border prose-img:border-slate-200
+                          prose-figure:my-8 prose-figure:sm:my-10
+                          [&_p>img]:my-8 [&_p>img]:sm:my-10 [&_img+img]:mt-8 [&_figure]:my-8"
               dangerouslySetInnerHTML={{ __html: formattedHtml }}
             />
 
