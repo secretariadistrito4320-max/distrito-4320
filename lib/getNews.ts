@@ -4,13 +4,13 @@ export interface NewsItem {
   title: string;
   summary: string;
   contentHtml: string;
-  content: string; // 👈 Cambiado de opcional a obligatorio
+  content: string;
   date: string;
   imageUrl: string;
   clubId: string;
   clubName: string;
   author: string;
-  category?: string;
+  category: string; // 👈 Cambiado a obligatorio
   galleryImages?: string[];
 }
 
