@@ -304,10 +304,10 @@ export default function Navbar() {
               {carteleraOpen && (
                 <div className="absolute right-0 top-full pt-1.5 w-64 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
                   <div className="rounded-xl bg-white text-slate-800 shadow-xl border border-slate-200 overflow-hidden p-2 space-y-1 text-xs font-semibold">
-                    <Link href="/#agenda-gobernador" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-[#00246C] transition-colors">
+                    <Link href="/#cartelera-distrital" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 hover:text-[#00246C] transition-colors">
                       <Calendar className="w-3.5 h-3.5 text-[#00246C]" /> Agenda del Gobernador
                     </Link>
-                    <Link href="/#actividades-distritales" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 text-[#00246C] font-bold transition-colors">
+                    <Link href="/#cartelera-distrital" className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-50 text-[#00246C] font-bold transition-colors">
                       <Sparkles className="w-3.5 h-3.5 text-[#F7A81B]" /> ACTIVIDADES DISTRITALES
                     </Link>
                   </div>
@@ -368,8 +368,8 @@ export default function Navbar() {
 
           <div className="rounded-lg bg-blue-950/60 p-2.5 space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#F7A81B] block px-1 pb-1 border-b border-blue-900">Cartelera</span>
-            <Link href="/#agenda-gobernador" className="block px-2 py-1.5 text-white hover:bg-blue-900 rounded">• Agenda del Gobernador</Link>
-            <Link href="/#actividades-distritales" className="block px-2 py-1.5 text-[#F7A81B] font-bold rounded">• ACTIVIDADES DISTRITALES</Link>
+            <Link href="/#cartelera-distrital" className="block px-2 py-1.5 text-white hover:bg-blue-900 rounded">• Agenda del Gobernador</Link>
+            <Link href="/#cartelera-distrital" className="block px-2 py-1.5 text-[#F7A81B] font-bold rounded">• ACTIVIDADES DISTRITALES</Link>
           </div>
 
           <Link href="/#noticias-section" className="block px-3 py-2.5 rounded-lg bg-[#F7A81B] text-[#00246C] font-black text-center shadow">
