@@ -106,19 +106,20 @@ export default function FeaturedPhoto() {
               )}
             </div>
 
-            {/* Pie de Tarjeta */}
-            <div className="mt-8 pt-6 border-t border-slate-100 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#00246C] text-[#F7A81B] font-extrabold flex items-center justify-center text-sm shadow-md shrink-0">
-                4320
+            {/* Pie de Tarjeta con el Logo Oficial Azul */}
+            <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+              <div className="relative h-10 w-48">
+                <Image
+                  src="/images/logo-rotary-azul.png"
+                  alt="Rotary Distrito 4320"
+                  fill
+                  sizes="192px"
+                  className="object-contain object-left"
+                />
               </div>
-              <div>
-                <p className="text-xs font-bold text-slate-900 uppercase tracking-wide">
-                  Acción Rotary en Acción
-                </p>
-                <p className="text-xs text-slate-500">
-                  Aporte enviado vía AppSheet por el club
-                </p>
-              </div>
+              <span className="text-[11px] font-bold text-[#00246C] uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100">
+                Distrito 4320
+              </span>
             </div>
 
           </div>
