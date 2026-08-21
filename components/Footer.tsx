@@ -64,7 +64,6 @@ export default function Footer() {
           {/* Column 1: Identity & Official Logo Agrandado */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-block">
-              {/* Tamaño aumentado a 72/80 de ancho y 20/24 de alto */}
               <div className="relative w-72 h-20 sm:w-80 sm:h-24">
                 <Image
                   src="/images/logo-rotary_2.png"
@@ -179,12 +178,14 @@ export default function Footer() {
 
         </div>
 
-        {/* Bottom Bar: Copyright & Links */}
-        <div className="mt-10 pt-6 border-t border-blue-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400">
+        {/* Bottom Bar: Copyright, Links & Créditos PáginasPro */}
+        <div className="mt-10 pt-6 border-t border-blue-900/60 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+          
           <div>
             © {new Date().getFullYear()} Rotary International Distrito 4320 - Chile. Todos los derechos reservados.
           </div>
-          <div className="flex items-center gap-4">
+
+          <div className="flex flex-wrap items-center gap-4">
             <a
               href="https://www.rotary.org/es-mx"
               target="_blank"
@@ -205,7 +206,18 @@ export default function Footer() {
               <span>End Polio Now</span>
               <ExternalLink className="w-2.5 h-2.5" />
             </a>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <a
+              href="https://paginaspro.cl"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors text-slate-400 inline-flex items-center gap-1 group"
+            >
+              <span>Desarrollado por</span>
+              <span className="font-bold text-slate-300 group-hover:text-[#F7A81B] transition-colors">PáginasPro.cl</span>
+            </a>
           </div>
+
         </div>
 
       </div>
