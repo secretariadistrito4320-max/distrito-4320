@@ -37,7 +37,7 @@ export default function CarteleraSection() {
   if (!eventos || eventos.length === 0) return null;
 
   return (
-    <section className="w-full py-8 sm:py-10 bg-gradient-to-r from-[#001233] via-[#001744] to-[#00246C] text-white border-t-2 border-[#F7A81B]">
+    <section id="cartelera-distrital" className="w-full py-8 sm:py-10 bg-gradient-to-r from-[#001233] via-[#001744] to-[#00246C] text-white border-t-2 border-[#F7A81B]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Encabezado Compacto */}
