@@ -1,20 +1,27 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 🚀 Rotary Distrito 4320 - Portal Web & Sistema de Gestión
 
-# Run and deploy your AI Studio app
+> Plataforma web institucional desarrollada por **PáginasPro.cl** para el Distrito 4320 de Rotary International.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/d5421132-468e-4fc9-ada2-b662334b4a44
+## 🛠️ Arquitectura y Tecnologías
 
-## Run Locally
+Este sitio web está construido con una infraestructura moderna, rápida y sincronizada en tiempo real:
 
-**Prerequisites:**  Node.js
+* **Frontend Web:** Next.js 15 (App Router), React 19, Tailwind CSS y Lucide Icons.
+* **Panel de Administración (CMS):** AppSheet (Aplicación móvil e intuitiva para los administradores).
+* **Base de Datos Maestro:** Google Sheets.
+* **Backend API & Automatizaciones:** Google Apps Script (Servicio REST multi-hoja y sincronización de PDFs/Imágenes).
+* **Alojamiento Multimedia:** Cloudinary CDN para imágenes comprimidas y optimizadas.
+* **Despliegue & Hosting:** Vercel.
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 💻 Desarrollo Local
+
+Para correr este proyecto en tu computadora:
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone [https://github.com/secretariadistrito4320-max/distrito-4320.git](https://github.com/secretariadistrito4320-max/distrito-4320.git)
+   cd distrito-4320
