@@ -10,12 +10,16 @@ export interface NewsItem {
   clubId: string;
   clubName: string;
   author: string;
-  category: string; // 👈 Cambiado a obligatorio
+  category: string;
   galleryImages?: string[];
 }
 
 export const SHEETS_API_URL =
   'https://script.google.com/macros/s/AKfycbyB2VdT6qYPNcEAmlrAMWpgpd9LObcTAk0imjRMsI6W3-ChCegRi31w_B1WoZpxW5va/exec';
+
+// Caché temporal en memoria durante la compilación
+let newsCache: NewsItem[] | null = null;
+let newsCacheTime = 0;
 
 export function parseNewsData(data: any[]): NewsItem[] {
   if (!Array.isArray(data)) return [];
@@ -47,18 +51,26 @@ export function parseNewsData(data: any[]): NewsItem[] {
 }
 
 export async function getNews(): Promise<NewsItem[]> {
+  const now = Date.now();
+  // Reutiliza los datos si la consulta se hizo hace menos de 60 segundos
+  if (newsCache && now - newsCacheTime < 60000) {
+    return newsCache;
+  }
+
   try {
     const res = await fetch(`${SHEETS_API_URL}?sheet=Noticias`, {
       cache: 'no-store',
     });
 
-    if (!res.ok) return [];
+    if (!res.ok) return newsCache || [];
 
     const data = await res.json();
-    return parseNewsData(data);
+    newsCache = parseNewsData(data);
+    newsCacheTime = now;
+    return newsCache;
   } catch (error) {
     console.error('Error fetching news:', error);
-    return [];
+    return newsCache || [];
   }
 }
 
