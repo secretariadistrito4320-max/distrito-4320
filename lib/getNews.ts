@@ -4,7 +4,7 @@ export interface NewsItem {
   title: string;
   summary: string;
   contentHtml: string;
-  content?: string;
+  content: string; // 👈 Cambiado de opcional a obligatorio
   date: string;
   imageUrl: string;
   clubId: string;
