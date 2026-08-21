@@ -49,7 +49,7 @@ export default async function ClubDetailPage({ params }: PageProps) {
 
   const allNews = await getNews();
   const clubNews = allNews.filter(
-    (item) => item.clubId === club.id || item.clubName.toLowerCase().includes(club.name.toLowerCase())
+    (item) => item.clubId === club.id || (item.clubName?.toLowerCase() || '').includes(club.name.toLowerCase())
   );
 
   const formattedCharterDate = club.charterDate
