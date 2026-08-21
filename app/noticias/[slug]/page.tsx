@@ -18,13 +18,12 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export const revalidate = 60; // Regenera el caché cada minuto
-export const dynamicParams = true; // Permite construir noticias antiguas on-demand
+export const revalidate = 60;
+export const dynamicParams = false; // Requerido para exportación estática (output: 'export')
 
-// OPTIMIZACIÓN: Solo pre-renderizar las 15 más recientes para evitar Timeout de Vercel (60s)
 export async function generateStaticParams() {
   const allNews = await getNews();
-  return allNews.slice(0, 15).map((news) => ({
+  return allNews.map((news) => ({
     slug: news.slug,
   }));
 }
@@ -56,11 +55,9 @@ function formatArticleContent(rawContent: string): string {
 
   let formatted = rawContent.trim();
 
-  // Detectar si el contenido ya contiene etiquetas HTML de estructura (WordPress)
   const hasHtmlTags = /<(p|div|h[1-6]|blockquote|figure|section|article)/i.test(formatted);
 
   if (hasHtmlTags) {
-    // 1. Inyectar estilos a imágenes e incrustaciones HTML
     formatted = formatted.replace(
       /<img /gi,
       '<img class="my-8 sm:my-10 rounded-2xl shadow-md border border-slate-200 w-full object-cover block" '
@@ -71,13 +68,11 @@ function formatArticleContent(rawContent: string): string {
       '<figure class="my-8 sm:my-10 w-full overflow-hidden" '
     );
 
-    // 2. Inyectar estilos a párrafos existentes
     formatted = formatted.replace(
       /<p>/gi,
       '<p class="mb-6 leading-relaxed text-slate-700 text-justify text-pretty">'
     );
 
-    // 3. Formatear lemas y subtítulos en mayúsculas
     formatted = formatted.replace(
       /(ROTARY GENERA UN IMPACTO DURADERO|DAR DE SÍ ANTES DE PENSAR EN SÍ|EL PRINCIPIO QUE INSPIRA CADA ACCIÓN DE ROTARY|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ CONCENTRA APOYO|ROTARY CLUB [A-ZÁÉÍÓÚÑ\s]+ LIDERA ALIANZA)/g,
       '</p><h3 class="text-base sm:text-lg font-black text-[#00246C] mt-8 mb-4 pt-2 tracking-tight block">$1</h3><p>'
@@ -86,7 +81,6 @@ function formatArticleContent(rawContent: string): string {
     return formatted;
   }
 
-  // Si es Texto Plano (Noticias creadas en AppSheet)
   const blocks = formatted
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
@@ -97,7 +91,6 @@ function formatArticleContent(rawContent: string): string {
     .map((block) => {
       const trimmed = block.trim();
 
-      // Detectar subtítulo corto (menos de 60 caracteres, sin punto final ni dos puntos)
       const isShortHeading =
         trimmed.length > 0 &&
         trimmed.length < 60 &&
